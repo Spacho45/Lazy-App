@@ -1,0 +1,2 @@
+import { PageIntro } from "@/components/site-shell";
+export default function Mentions() { return <><PageIntro eyebrow="Cadre légal" title="Mentions légales.">Cette page doit être complétée avant publication.</PageIntro><section className="section pt-8 text-white/60"><div className="glass max-w-3xl p-6">À compléter avant publication : raison sociale, forme juridique, siège, immatriculation, directeur de publication, hébergeur et coordonnées de contact.</div></section></>; }

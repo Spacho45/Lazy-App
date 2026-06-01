@@ -1,0 +1,2 @@
+import { PageIntro } from "@/components/site-shell";
+export default function Confidentialite() { return <><PageIntro eyebrow="Vos données" title="Confidentialité.">Cette page doit être complétée avant collecte publique de données.</PageIntro><section className="section pt-8 text-white/60"><div className="glass max-w-3xl p-6">À compléter avant publication : responsable de traitement, finalités, base légale, durée de conservation, destinataires, droits des personnes et modalités de contact.</div></section></>; }

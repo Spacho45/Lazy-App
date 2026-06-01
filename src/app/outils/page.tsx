@@ -1,0 +1,3 @@
+import type { Metadata } from "next"; import { CTA, ToolsGrid } from "@/components/sections"; import { PageIntro } from "@/components/site-shell";
+export const metadata: Metadata = { title: "Outils", description: "CRM, IA, automatisations, dashboards et outils connectés." };
+export default function Outils() { return <><PageIntro eyebrow="Sous le capot de verre" title="Un moteur utile. Visible. Pilotable.">Les outils ne sont pas là pour impressionner. Ils sont là pour accélérer votre activité, réduire les frictions et garder une vue claire.</PageIntro><section className="section pt-8"><ToolsGrid /><CTA compact /></section></>; }

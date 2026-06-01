@@ -1,0 +1,3 @@
+import type { Metadata } from "next"; import { CTA, EnvironmentsGrid } from "@/components/sections"; import { PageIntro } from "@/components/site-shell";
+export const metadata: Metadata = { title: "Écosystème", description: "Just Socialing, CPF et Pure Owner : les trois environnements Les IAP." };
+export default function Ecosysteme() { return <><PageIntro eyebrow="Architecture de marque" title="Trois portes d'entrée.">Une maison-mère et trois langages complémentaires pour attirer, expliquer et donner envie de posséder son identité numérique.</PageIntro><section className="section pt-8"><EnvironmentsGrid /><CTA compact /></section></>; }
