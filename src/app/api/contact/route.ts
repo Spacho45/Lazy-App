@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return NextResponse.json({ error: "Merci de saisir une adresse email valide." }, { status: 400 });
   const webhook = process.env.CONTACT_WEBHOOK_URL;
   if (!webhook) return NextResponse.json({ error: "Le formulaire est prêt, mais le webhook de réception doit encore être configuré." }, { status: 503 });
-  const response = await fetch(webhook, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, source: "les-iap.fr", sentAt: new Date().toISOString() }) }).catch(() => null);
+  const response = await fetch(webhook, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, source: "lazyapp.fr", sentAt: new Date().toISOString() }) }).catch(() => null);
   if (!response?.ok) return NextResponse.json({ error: "Le service de réception ne répond pas. Vos informations restent dans le formulaire." }, { status: 502 });
   return NextResponse.json({ ok: true });
 }

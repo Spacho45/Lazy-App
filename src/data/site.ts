@@ -14,9 +14,9 @@ export const steps: Step[] = [
   { number: "06", title: "Outils & automatisation", metaphor: "Faire tourner le moteur", summary: "On installe un système opérationnel visible, pilotable et utile au quotidien.", items: ["CRM", "Automatisations", "Dashboards", "IA métier"] },
 ];
 export const environments: Environment[] = [
-  { name: "Just Socialing", eyebrow: "Attirer l'attention", description: "L'entrée dark, punk et cyberpunk. Une provocation intelligente pour créer du désir et casser les codes.", role: ["Créer du bruit utile", "Donner envie d'entrer", "Produire des formats viraux"], tone: "Street, drôle, tranchant", accent: "acid" },
-  { name: "CPF / C'est Pas Faux", eyebrow: "Rendre limpide", description: "L'univers pédagogique et accessible qui transforme les sujets complexes en décisions simples.", role: ["Rassurer les entreprises", "Expliquer sans ennuyer", "Formaliser les livrables"], tone: "Clair, sérieux, légèrement décalé", accent: "fire", image: "/assets/cpf.png" },
-  { name: "Pure Owner", eyebrow: "Posséder ce qui compte", description: "L'environnement premium qui parle identité, propriété numérique et souveraineté personnelle.", role: ["Porter la vision haut de gamme", "Parler de patrimoine digital", "Créer de l'exclusivité"], tone: "Élégant, calme, minimaliste", accent: "champagne", image: "/assets/pure-owner.png" },
+  { name: "Just Hustelin'", eyebrow: "Attirer l'attention", description: "L'entrée dark, punk et cyberpunk. Une provocation intelligente pour créer du désir et casser les codes.", role: ["Créer du bruit utile", "Donner envie d'entrer", "Produire des formats viraux"], tone: "Street, drôle, tranchant", accent: "acid" },
+  { name: "CPF / C'est Pas Faux", eyebrow: "Rendre limpide", description: "L'univers pédagogique et accessible qui transforme les sujets complexes en décisions simples.", role: ["Rassurer les entreprises", "Expliquer sans ennuyer", "Formaliser les livrables"], tone: "Clair, sérieux, légèrement décalé", accent: "fire", image: "/assets/cpf.webp" },
+  { name: "Pure Owner", eyebrow: "Posséder ce qui compte", description: "L'environnement premium qui parle identité, propriété numérique et souveraineté personnelle.", role: ["Porter la vision haut de gamme", "Parler de patrimoine digital", "Créer de l'exclusivité"], tone: "Élégant, calme, minimaliste", accent: "champagne", image: "/assets/pure-owner.webp" },
 ];
 export const tools = ["CRM", "IA métier", "Automatisations", "Dashboards", "Formulaires", "QR codes", "Tunnels", "Paiements", "Wallets", "Analytics"];
 export const partnerProfiles = ["Designers", "Développeurs", "Copywriters", "Experts acquisition", "No-code builders", "Consultants", "Spécialistes SEO", "Experts IA"];
@@ -26,4 +26,4 @@ export const faqs = [
   { question: "Comment fonctionne la rémunération à la performance ?", answer: "Quand le contexte le permet, nous définissons ensemble une part liée aux résultats. Le cadre exact dépend du projet et reste transparent." },
   { question: "Pouvez-vous reprendre un système existant ?", answer: "Oui. On commence par regarder ce qui fonctionne déjà, puis on simplifie, connecte et améliore ce qui mérite de l'être." },
 ];
-export const siteDescription = "Les IAP construit votre territoire digital : identité, site, tunnels, acquisition et automatisation.";
+export const siteDescription = "Lazy App construit votre territoire digital : identité, site, tunnels, acquisition et automatisation.";
