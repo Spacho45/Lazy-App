@@ -33,6 +33,24 @@ a { transition: color .2s ease, border-color .2s ease, background .2s ease, tran
 
 .wordmark { font-size: 1.45rem; font-weight: 950; letter-spacing: -.08em; line-height: 1; }
 .wordmark span { color: var(--fire); }
+.brand-logo {
+  align-items: center;
+  display: inline-flex;
+  height: 2.35rem;
+  overflow: hidden;
+}
+.brand-logo img {
+  height: 3.6rem;
+  object-fit: contain;
+  transform: translateY(.03rem);
+  width: auto;
+}
+.brand-logo-footer {
+  height: 3rem;
+}
+.brand-logo-footer img {
+  height: 4.4rem;
+}
 .nav-link { color: rgba(255,255,255,.62); font-size: .9rem; }
 .nav-link:hover { color: white; }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { contact, navigation, projects } from "@/data/site";
 
@@ -10,7 +11,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#08080c]/88 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
-        <Link href="/" className="wordmark" onClick={() => setOpen(false)}>LAZY <span>APP</span></Link>
+        <Link href="/" className="brand-logo" onClick={() => setOpen(false)} aria-label="Lazy App - Accueil">
+          <Image src="/assets/lazyapp-logo.png" alt="Lazy App" width={180} height={120} priority />
+        </Link>
         <button className="md:hidden" aria-expanded={open} aria-label="Ouvrir le menu" onClick={() => setOpen(!open)}>
           <span className="block h-0.5 w-6 bg-white" />
           <span className="mt-1.5 block h-0.5 w-6 bg-white" />
@@ -31,7 +34,9 @@ export function Footer() {
     <footer className="footer-hub">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 lg:grid-cols-[1.2fr_.8fr_.8fr_.9fr] lg:px-8">
         <div>
-          <div className="wordmark">LAZY <span>APP</span></div>
+          <Link href="/" className="brand-logo brand-logo-footer" aria-label="Lazy App - Accueil">
+            <Image src="/assets/lazyapp-logo.png" alt="Lazy App" width={210} height={140} />
+          </Link>
           <p className="mt-4 max-w-sm text-sm leading-6 text-white/60">
             Atelier numérique premium. Nous aidons les entrepreneurs à transformer une idée en système complet :
             identité, présence, outils, acquisition et automatisation.

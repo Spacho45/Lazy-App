@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.lazyapp.fr"),
   title: { default: "Lazy App | Atelier numérique premium", template: "%s | Lazy App" },
   description: siteDescription,
+  icons: {
+    icon: [
+      { url: "/assets/lazyapp-favicon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [
+      { url: "/assets/lazyapp-favicon.png", type: "image/png", sizes: "512x512" },
+    ],
+  },
   openGraph: { title: "Lazy App", description: siteDescription, locale: "fr_FR", type: "website" },
 };
 
