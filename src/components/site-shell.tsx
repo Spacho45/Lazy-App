@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#08080c]/88 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 lg:px-8">
+      <div className="mx-auto flex w-full items-center justify-between px-6 py-2 lg:px-10">
         <Link href="/" className="brand-logo" onClick={() => setOpen(false)} aria-label="Lazy App - Accueil">
           <Image src="/assets/lazyapp-logo.png" alt="Lazy App" width={180} height={120} priority />
         </Link>
@@ -32,8 +32,8 @@ export function Header() {
 export function Footer() {
   return (
     <footer className="footer-hub">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 lg:grid-cols-[1.2fr_.8fr_.8fr_.9fr] lg:px-8">
-        <div>
+      <div className="mx-auto grid w-full gap-10 px-6 py-12 lg:grid-cols-[1.2fr_.8fr_.8fr_.9fr] lg:px-10">
+        <div className="lg:justify-self-end">
           <Link href="/" className="brand-logo brand-logo-footer" aria-label="Lazy App - Accueil">
             <Image src="/assets/lazyapp-logo.png" alt="Lazy App" width={210} height={140} />
           </Link>
