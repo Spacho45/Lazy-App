@@ -1,3 +1,21 @@
-import type { Metadata } from "next"; import { CTA, StepsGrid } from "@/components/sections"; import { PageIntro } from "@/components/site-shell";
-export const metadata: Metadata = { title: "Méthode", description: "Les six étapes de construction de votre territoire digital." };
-export default function Methode() { return <><PageIntro eyebrow="La méthode Lazy App" title="Du terrain au moteur.">Six étapes concrètes pour construire votre présence numérique sans transformer votre projet en chantier permanent.</PageIntro><section className="section pt-8"><StepsGrid /><CTA compact /></section></>; }
+import type { Metadata } from "next";
+import { CTA, JourneySection, MethodTimeline } from "@/components/sections";
+import { PageIntro } from "@/components/site-shell";
+
+export const metadata: Metadata = {
+  title: "Méthode",
+  description: "La méthode Lazy App pour transformer une idée en système numérique.",
+};
+
+export default function Methode() {
+  return (
+    <>
+      <PageIntro eyebrow="La méthode Lazy App" title="De l&apos;idée au système.">
+        Une progression claire pour construire sans s&apos;éparpiller : définir, bâtir, automatiser, développer, faire évoluer.
+      </PageIntro>
+      <MethodTimeline />
+      <JourneySection />
+      <CTA compact />
+    </>
+  );
+}

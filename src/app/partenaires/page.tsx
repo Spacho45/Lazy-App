@@ -1,3 +1,36 @@
-import type { Metadata } from "next"; import Image from "next/image"; import { CTA } from "@/components/sections"; import { PageIntro } from "@/components/site-shell"; import { partnerProfiles } from "@/data/site";
-export const metadata: Metadata = { title: "Partenaires", description: "Le modèle partenaire Lazy App : chacun apporte une pièce du moteur." };
-export default function Partenaires() { return <><PageIntro eyebrow="L'équipe artisanale" title="Chacun apporte une pièce du moteur.">Chacun touche sa part quand le moteur tourne. Nous réunissons les bons spécialistes autour du projet, sans usine à gaz.</PageIntro><section className="section grid gap-8 pt-8 lg:grid-cols-[.8fr_1.2fr]"><Image src="/assets/human-card.jpg" alt="Transmission d'une carte Lazy App" width={800} height={600} className="h-full max-h-[36rem] w-full rounded-2xl object-cover opacity-80" /><div className="grid grid-cols-2 gap-3">{partnerProfiles.map((profile, index) => <div key={profile} className="glass card-hover p-5"><span className="mono">0{index + 1}</span><h2 className="mt-7 font-bold">{profile}</h2></div>)}</div></section><section className="section pt-0"><CTA compact /></section></>; }
+import type { Metadata } from "next";
+import { CTA, ProjectsSection, ProofSection } from "@/components/sections";
+import { PageIntro } from "@/components/site-shell";
+import { partnerProfiles } from "@/data/site";
+
+export const metadata: Metadata = {
+  title: "Réalisations",
+  description: "Réalisations, projets et réseau de partenaires Lazy App.",
+};
+
+export default function Partenaires() {
+  return (
+    <>
+      <PageIntro eyebrow="Réalisations & partenaires" title="Des projets pensés comme des systèmes.">
+        Nous réunissons les bonnes compétences autour de chaque projet : design, développement, copywriting, acquisition, automatisation et IA.
+      </PageIntro>
+      <ProjectsSection />
+      <ProofSection />
+      <section className="section pt-0">
+        <div className="section-kicker">
+          <p className="eyebrow">Réseau</p>
+          <h2 className="section-title">Chaque spécialiste apporte une pièce du moteur.</h2>
+        </div>
+        <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
+          {partnerProfiles.map((profile, index) => (
+            <div key={profile} className="glass card-hover p-5">
+              <span className="mono">0{index + 1}</span>
+              <h3 className="mt-7 font-bold">{profile}</h3>
+            </div>
+          ))}
+        </div>
+      </section>
+      <CTA compact />
+    </>
+  );
+}

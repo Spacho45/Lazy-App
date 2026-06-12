@@ -1,3 +1,56 @@
-import Image from "next/image"; import Link from "next/link";
-import { CTA, EnvironmentsGrid, FAQ, StepsGrid, ToolsGrid } from "@/components/sections";
-export default function Home() { return <><section className="section grid min-h-[84vh] items-center gap-10 lg:grid-cols-[1.25fr_.75fr]"><div><p className="eyebrow">Partir sur de bonnes bases</p><h1 className="hero-title mt-5">Prendre le contrôle de ses données personnelles</h1><p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">À l&apos;image de l&apos;engouement des entreprises pour les .com en 2000, c&apos;est au tour des personnes de s&apos;approprier leur territoire numérique.</p><div className="mt-8 flex flex-wrap gap-3"><Link className="btn-primary" href="/contact">Mon identité sur-mesure</Link><Link className="btn-secondary" href="/methode">Voir la méthode</Link></div></div><div className="relative overflow-hidden rounded-2xl border border-white/10"><Image src="/assets/human-card.jpg" alt="Une carte Lazy App remise depuis une voiture" width={900} height={700} className="aspect-[4/5] object-cover opacity-80" priority /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black p-6 pt-20"><p className="mono">Caravane moderne / moteur visible</p><p className="mt-3 text-xl font-bold">Humain dans l&apos;approche.<br />Premium dans l&apos;exécution.</p></div></div></section><section className="section pt-0"><p className="eyebrow">Terrain → Routes → Maison → Invitations → Convives → Moteur</p><h2 className="section-title">On ne vous fait pas juste un site.</h2><p className="mt-5 max-w-3xl text-white/60">On vous construit une adresse, une maison, des routes, des invitations, des outils et un moteur.</p><div className="mt-9"><StepsGrid /></div></section><section className="section"><p className="eyebrow">Une maison-mère, trois entrées</p><h2 className="section-title">Trois environnements. Une même mécanique.</h2><div className="mt-9"><EnvironmentsGrid /></div></section><section className="section"><p className="eyebrow">Sous le capot</p><h2 className="section-title">Tout ce qu&apos;il faut. Rien pour faire joli.</h2><div className="mt-9"><ToolsGrid /></div></section><section className="section"><div className="glass border-[#8b5cf6]/40 p-8 md:p-12"><p className="eyebrow">Business model</p><h2 className="mt-4 max-w-4xl text-3xl font-black tracking-tight md:text-6xl">On construit. On connecte. On automatise. On prend un pourcentage sur ce qui fonctionne. Sinon, rien.</h2></div></section><FAQ /><CTA /></>; }
+import Link from "next/link";
+import {
+  CTA,
+  EnvironmentsGrid,
+  FAQ,
+  JourneySection,
+  MethodTimeline,
+  ProjectsSection,
+  ProofSection,
+  SystemMockup,
+  ToolsGrid,
+} from "@/components/sections";
+import { hero, promise } from "@/data/site";
+
+export default function Home() {
+  return (
+    <>
+      <section className="hero-section">
+        <div className="hero-copy">
+          <p className="eyebrow">{hero.eyebrow}</p>
+          <h1 className="hero-title mt-5">{hero.title}</h1>
+          <p className="hero-body">{hero.body}</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link className="btn-primary" href="/contact">{hero.primaryCta}</Link>
+            <Link className="btn-secondary" href="/methode">{hero.secondaryCta}</Link>
+          </div>
+          <div className="hero-proof">
+            <span>Identité</span>
+            <span>Site</span>
+            <span>Automatisation</span>
+            <span>Acquisition</span>
+            <span>IA</span>
+          </div>
+        </div>
+        <SystemMockup />
+      </section>
+
+      <section className="section pt-0">
+        <div className="promise-card">
+          <p className="eyebrow">La promesse</p>
+          <h2>{promise.title}</h2>
+          <p>{promise.body}</p>
+        </div>
+      </section>
+
+      <JourneySection />
+      <MethodTimeline />
+      <ProjectsSection />
+      <ProofSection />
+      <EnvironmentsGrid />
+      <ToolsGrid />
+      <FAQ />
+      <CTA />
+    </>
+  );
+}

@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.lazyapp.fr"),
-  title: { default: "Lazy App | Territoire digital", template: "%s | Lazy App" },
+  title: { default: "Lazy App | Atelier numérique premium", template: "%s | Lazy App" },
   description: siteDescription,
   openGraph: { title: "Lazy App", description: siteDescription, locale: "fr_FR", type: "website" },
 };

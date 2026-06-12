@@ -1,3 +1,23 @@
-import type { Metadata } from "next"; import { CTA, ToolsGrid } from "@/components/sections"; import { PageIntro } from "@/components/site-shell";
-export const metadata: Metadata = { title: "Outils", description: "CRM, IA, automatisations, dashboards et outils connectés." };
-export default function Outils() { return <><PageIntro eyebrow="Sous le capot de verre" title="Un moteur utile. Visible. Pilotable.">Les outils ne sont pas là pour impressionner. Ils sont là pour accélérer votre activité, réduire les frictions et garder une vue claire.</PageIntro><section className="section pt-8"><ToolsGrid /><CTA compact /></section></>; }
+import type { Metadata } from "next";
+import { CTA, SystemMockup, ToolsGrid } from "@/components/sections";
+import { PageIntro } from "@/components/site-shell";
+
+export const metadata: Metadata = {
+  title: "Outils",
+  description: "Les capacités numériques que Lazy App assemble pour les entrepreneurs.",
+};
+
+export default function Outils() {
+  return (
+    <>
+      <PageIntro eyebrow="Sous le capot" title="Des outils qui servent le système.">
+        CRM, automatisations, IA, acquisition et dashboards ne sont utiles que s&apos;ils rendent votre activité plus simple à piloter.
+      </PageIntro>
+      <section className="section pt-8">
+        <SystemMockup />
+      </section>
+      <ToolsGrid />
+      <CTA compact />
+    </>
+  );
+}
