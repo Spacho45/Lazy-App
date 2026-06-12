@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#08080c]/88 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 lg:px-8">
         <Link href="/" className="brand-logo" onClick={() => setOpen(false)} aria-label="Lazy App - Accueil">
           <Image src="/assets/lazyapp-logo.png" alt="Lazy App" width={180} height={120} priority />
         </Link>
@@ -22,7 +22,7 @@ export function Header() {
           {navigation.map((item) => (
             <Link key={item.href} href={item.href} className="nav-link" onClick={() => setOpen(false)}>{item.label}</Link>
           ))}
-          <Link href="/contact" className="btn-primary text-center" onClick={() => setOpen(false)}>Construire mon système</Link>
+          <Link href="/contact" className="header-cta text-center" onClick={() => setOpen(false)}>Discuter</Link>
         </nav>
       </div>
     </header>
@@ -41,7 +41,7 @@ export function Footer() {
             Atelier numérique premium. Nous aidons les entrepreneurs à transformer une idée en système complet :
             identité, présence, outils, acquisition et automatisation.
           </p>
-          <Link href="/contact" className="btn-primary mt-6">Parler de mon projet</Link>
+          <Link href="/contact" className="quiet-cta mt-6">Discuter</Link>
         </div>
 
         <div>

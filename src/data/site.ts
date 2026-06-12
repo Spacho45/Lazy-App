@@ -47,7 +47,7 @@ export const navigation = [
 export const hero = {
   eyebrow: "Atelier numérique premium",
   title: "Nous construisons votre système numérique.",
-  body: "Vous avez une idée. Nous construisons l'identité, le site, les outils, l'acquisition et les automatisations qui la font vivre.",
+  body: "Vous avez une idée ? Nous saurons lui donner vie...",
   primaryCta: "Construire mon système",
   secondaryCta: "Voir la méthode",
 };
@@ -60,36 +60,36 @@ export const promise = {
 export const journey: JourneyStep[] = [
   {
     number: "01",
-    metaphor: "Acheter le terrain",
+    metaphor: "L'acquisition du terrain",
     title: "Votre identité numérique",
-    result: "Une adresse claire, crédible et durable pour exister en ligne.",
-    details: ["Nom de domaine", "Propriété numérique", "Wallets et accès", "Sécurité de base"],
+    result: "Une adresse claire, crédible et durable pour exister d'une manière cohérente en ligne.",
+    details: ["Nom de domaine", "Propriété numérique", "Web3", "Sécurité de base"],
   },
   {
     number: "02",
-    metaphor: "Construire la maison",
+    metaphor: "Bâtir la maison",
     title: "Votre présence en ligne",
     result: "Un site ou une app simple à comprendre, beau à regarder, prêt à convertir.",
     details: ["Site vitrine", "Landing pages", "Espace client", "Formulaires"],
   },
   {
     number: "03",
-    metaphor: "Aménager la maison",
+    metaphor: "Réaliser les aménagements intérieurs",
     title: "Vos outils et automatisations",
     result: "Un quotidien plus fluide, moins manuel, mieux connecté.",
     details: ["CRM", "Dashboards", "Relances", "IA métier"],
   },
   {
     number: "04",
-    metaphor: "Inviter les visiteurs",
-    title: "Votre acquisition",
+    metaphor: "Lancer les invitations",
+    title: "Une acquisition easy going",
     result: "Des chemins d'entrée clairs pour attirer les bons prospects.",
     details: ["Contenus", "SEO", "Campagnes", "Prospection"],
   },
   {
     number: "05",
-    metaphor: "Faire tourner le moteur",
-    title: "Votre croissance",
+    metaphor: "La fiesta parfaite !",
+    title: "Une croissance appréciée",
     result: "Un système qui apprend, mesure et évolue avec votre activité.",
     details: ["Conversion", "Analytics", "Optimisation", "Nouveaux canaux"],
   },
@@ -115,7 +115,7 @@ export const environments: Environment[] = [
     cta: "Créer le signal",
   },
   {
-    name: "CPF / C'est Pas Faux",
+    name: "C'est Pas Faux...",
     eyebrow: "Clarté",
     description: "L'espace qui rend les sujets complexes compréhensibles, rassurants et vendables.",
     role: ["Pédagogie", "Offres structurées", "Livrables lisibles"],
@@ -125,7 +125,7 @@ export const environments: Environment[] = [
     image: "/assets/cpf.webp",
   },
   {
-    name: "PureOwner",
+    name: "PureOwner.com",
     eyebrow: "Propriété",
     description: "La vision premium de l'identité numérique, de la donnée personnelle et du patrimoine digital.",
     role: ["Identité souveraine", "Statut digital", "Web de demain"],

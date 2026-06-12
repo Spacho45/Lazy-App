@@ -68,8 +68,8 @@ export function JourneySection() {
   return (
     <section className="section">
       <div className="section-kicker">
-        <p className="eyebrow">Terrain → Maison → Outils → Invitations → Moteur</p>
-        <h2 className="section-title">Un parcours clair. Pas une liste de services.</h2>
+        <p className="eyebrow">Acquisition → Construction → Aménagement → Invitations → Fiesta</p>
+        <h2 className="section-title">Un parcours plus qu&apos;une liste de services.</h2>
         <p className="section-copy">
           Chaque étape produit un résultat concret pour l&apos;entrepreneur : plus de clarté, plus de crédibilité,
           plus de vitesse et moins de friction.
@@ -98,7 +98,7 @@ export function MethodTimeline() {
   return (
     <section className="section">
       <div className="section-kicker centered">
-        <p className="eyebrow">Notre méthode</p>
+        <p className="eyebrow">Notre méthode : simple, rapide, efficace</p>
         <h2 className="section-title">Une idée. Une méthode. Un système.</h2>
       </div>
       <div className="timeline">
@@ -178,7 +178,7 @@ export function EnvironmentsGrid() {
     <section className="section">
       <div className="section-kicker">
         <p className="eyebrow">Les trois univers</p>
-        <h2 className="section-title">Trois produits distincts. Une même exigence.</h2>
+        <h2 className="section-title">Trois approches distinctes. Une même exigence.</h2>
       </div>
       <div className="environment-grid">
         {environments.map((env) => (

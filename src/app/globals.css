@@ -36,20 +36,20 @@ a { transition: color .2s ease, border-color .2s ease, background .2s ease, tran
 .brand-logo {
   align-items: center;
   display: inline-flex;
-  height: 2.35rem;
+  height: 8.7rem;
   overflow: hidden;
 }
 .brand-logo img {
-  height: 3.6rem;
+  height: 14.4rem;
   object-fit: contain;
   transform: translateY(.03rem);
   width: auto;
 }
 .brand-logo-footer {
-  height: 3rem;
+  height: 12.8rem;
 }
 .brand-logo-footer img {
-  height: 4.4rem;
+  height: 20rem;
 }
 .nav-link { color: rgba(255,255,255,.62); font-size: .9rem; }
 .nav-link:hover { color: white; }
@@ -69,6 +69,47 @@ a { transition: color .2s ease, border-color .2s ease, background .2s ease, tran
 .btn-primary:hover { background: #e1ff7d; transform: translateY(-2px); }
 .btn-secondary { border: 1px solid rgba(255,255,255,.18); color: white; }
 .btn-secondary:hover { border-color: rgba(201,255,56,.55); color: var(--acid); transform: translateY(-2px); }
+.header-cta {
+  align-items: center;
+  background: rgba(255, 255, 255, .055);
+  border: 1px solid rgba(201, 255, 56, .36);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 16px 44px rgba(0, 0, 0, .22);
+  color: rgba(255, 255, 255, .88);
+  display: inline-flex;
+  font-size: .84rem;
+  font-weight: 760;
+  justify-content: center;
+  letter-spacing: -.01em;
+  min-height: 2.9rem;
+  padding: .75rem 1.18rem;
+}
+.header-cta:hover {
+  background: rgba(201, 255, 56, .12);
+  border-color: rgba(201, 255, 56, .72);
+  color: white;
+  transform: translateY(-1px);
+}
+.quiet-cta {
+  align-items: center;
+  background: rgba(255, 255, 255, .045);
+  border: 1px solid rgba(201, 255, 56, .32);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+  color: rgba(255, 255, 255, .86);
+  display: inline-flex;
+  font-size: .84rem;
+  font-weight: 760;
+  justify-content: center;
+  min-height: 2.65rem;
+  padding: .68rem 1.15rem;
+}
+.quiet-cta:hover {
+  background: rgba(201, 255, 56, .11);
+  border-color: rgba(201, 255, 56, .68);
+  color: white;
+  transform: translateY(-1px);
+}
 
 .section,
 .hero-section,
