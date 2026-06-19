@@ -151,7 +151,14 @@ a { transition: color .2s ease, border-color .2s ease, background .2s ease, tran
   padding-top: 120px;
 }
 .hero-copy { align-self: center; }
-.hero-title,
+.hero-title {
+  font-size: clamp(3rem, 10.2vw, 6.6rem);
+  font-weight: 950;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+  max-width: 680px;
+}
+
 .page-intro h1 {
   font-size: clamp(3.2rem, 12vw, 7.8rem);
   font-weight: 950;
