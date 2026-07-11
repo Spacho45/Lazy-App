@@ -1,0 +1,22 @@
+[
+  {
+    "id": "article-library",
+    "title": "Bibliotheque d'articles",
+    "type": "Base locale",
+    "category": "Articles",
+    "date": "2026-07-03",
+    "description": "Acces aux analyses, sources, favoris et versions enrichies depuis l'espace de lecture.",
+    "url": "library/index.html",
+    "status": "available"
+  },
+  {
+    "id": "analysis-workshop",
+    "title": "Atelier d'analyse",
+    "type": "Widget",
+    "category": "Production",
+    "date": "2026-07-03",
+    "description": "Outil de generation de trames exportables et sauvegardes localement dans le navigateur.",
+    "url": "analyse-textes-widget.html",
+    "status": "available"
+  }
+]

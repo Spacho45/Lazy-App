@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bibliotheque des widgets</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231b6f69'/%3E%3Cpath d='M18 22h28M18 32h28M18 42h28' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f5f2;
+      --surface: #ffffff;
+      --surface-soft: #fbfaf7;
+      --ink: #161616;
+      --muted: #68635c;
+      --line: #dedad2;
+      --line-strong: #c9c1b5;
+      --accent: #1b6f69;
+      --accent-2: #b7772c;
+      --accent-soft: #eaf5f3;
+      --good: #2d7256;
+      --shadow: 0 18px 45px rgba(22, 22, 22, .08);
+      --radius: 8px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      border-right: 1px solid var(--line);
+      background: var(--surface-soft);
+      padding: 22px 16px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 26px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .brand h1,
+    .library-head h2 {
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .brand p,
+    .library-head p,
+    .card p,
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .side-section {
+      margin-top: 26px;
+    }
+
+    .side-section h2 {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .filter-nav,
+    .status-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .filter-button,
+    .status-button {
+      width: 100%;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    .filter-button:hover,
+    .status-button:hover,
+    .filter-button.is-active,
+    .status-button.is-active {
+      border-color: var(--line);
+      background: var(--surface);
+    }
+
+    .filter-count {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .content {
+      min-width: 0;
+      padding: 22px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 220px;
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 0 14px;
+    }
+
+    .search-wrap svg,
+    .icon-button svg,
+    .card-icon svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    select,
+    .icon-button {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    select {
+      padding: 0 34px 0 12px;
+    }
+
+    .icon-button {
+      width: 46px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .library-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .headline {
+      max-width: 720px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .headline p {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .active-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .tag {
+      min-height: 24px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+      padding: 3px 9px;
+    }
+
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 13px 14px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 276px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: inherit;
+      text-decoration: none;
+      overflow: hidden;
+      box-shadow: 0 1px 0 rgba(22, 22, 22, .03);
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .card:hover,
+    .card:focus-visible {
+      border-color: var(--line-strong);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+      outline: 0;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 14px 0;
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .status-pill {
+      min-height: 24px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(45, 114, 86, .22);
+      border-radius: 999px;
+      background: #edf7f2;
+      color: var(--good);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+
+    .card-body {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      padding: 14px;
+    }
+
+    .card-kicker {
+      color: var(--accent-2);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      line-height: 1.15;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid var(--line);
+      padding: 12px 14px;
+    }
+
+    .file-name {
+      min-width: 0;
+      overflow: hidden;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .open-label {
+      flex: 0 0 auto;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 28px;
+    }
+
+    @media (max-width: 820px) {
+      .app-shell {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand {
+        margin-bottom: 16px;
+      }
+
+      .side-section {
+        margin-top: 14px;
+        overflow: hidden;
+      }
+
+      .filter-nav,
+      .status-list {
+        display: flex;
+        gap: 8px;
+        margin: 0 -14px;
+        overflow-x: auto;
+        padding: 0 14px 4px;
+        scrollbar-width: thin;
+      }
+
+      .filter-button,
+      .status-button {
+        width: auto;
+        min-width: max-content;
+        flex: 0 0 auto;
+      }
+
+      .toolbar,
+      .library-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .active-tags {
+        justify-content: flex-start;
+      }
+
+      .summary-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar-actions {
+        width: 100%;
+      }
+
+      select {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .content,
+      .sidebar {
+        padding: 18px 14px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="lazyapp-widget-shell.css">
+</head>
+<body>
+  <div class="lazyapp-widget-back"><span>Lazy App · Widget dedie</span><a href="../../index.html#realisations">Retour au site</a></div>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Filtres">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">W</span>
+        <div>
+          <h1>Widgets</h1>
+          <p id="library-count">0 outils</p>
+        </div>
+      </div>
+
+      <nav class="filter-nav" id="category-filters" aria-label="Categories"></nav>
+
+      <section class="side-section">
+        <h2>Etat</h2>
+        <div class="status-list" id="status-filters"></div>
+      </section>
+    </aside>
+
+    <main class="content">
+      <header class="toolbar">
+        <div class="search-wrap">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="m21 21-4.2-4.2m1.2-5.3a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"/>
+          </svg>
+          <input id="search" type="search" placeholder="Rechercher un widget, une categorie..." autocomplete="off">
+        </div>
+        <div class="toolbar-actions">
+          <select id="sort" aria-label="Tri">
+            <option value="category">Categorie</option>
+            <option value="title">Nom A-Z</option>
+            <option value="status">Etat</option>
+          </select>
+          <button class="icon-button" id="clear" type="button" title="Reinitialiser les filtres" aria-label="Reinitialiser">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="library-head">
+        <div class="headline">
+          <h2>Bibliotheque des widgets</h2>
+          <p>Outils locaux prets a ouvrir, coller, transformer et publier. Chaque widget reste autonome pour pouvoir etre lance directement dans le navigateur.</p>
+          <p id="result-count">0 resultat</p>
+        </div>
+        <div class="active-tags" id="active-tags"></div>
+      </section>
+
+      <section class="summary-strip" aria-label="Synthese">
+        <div class="metric">
+          <strong id="metric-total">0</strong>
+          <span>outils disponibles</span>
+        </div>
+        <div class="metric">
+          <strong id="metric-categories">0</strong>
+          <span>categories</span>
+        </div>
+        <div class="metric">
+          <strong id="metric-ready">0</strong>
+          <span>prets a ouvrir</span>
+        </div>
+      </section>
+
+      <section class="grid" id="widget-grid" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <script>
+    const widgets = [
+      {
+        id: "cryptoclisme",
+        name: "CryptoClisme",
+        file: "CryptoClisme.html",
+        category: "Analyse LinkedIn",
+        description: "Analyse un post LinkedIn sceptique et prepare une reponse factuelle dans le ton du contradicteur ironique.",
+        status: "ready",
+        icon: "split"
+      },
+      {
+        id: "crypto-market-pulse",
+        name: "Crypto Market Pulse",
+        file: "CryptoMarketPulse.html",
+        category: "Marches crypto",
+        description: "Tableau de suivi des marches crypto inspire de CryptoNight avec prix, tendances, alertes et exports locaux.",
+        status: "ready",
+        icon: "bitcoin"
+      },
+      {
+        id: "tapemix",
+        name: "TapeMix",
+        file: "TapeMix.html",
+        category: "Audio",
+        description: "Mixer DJ local avec deux decks, crossfader, EQ, pitch, visualizer et enregistrement du master.",
+        status: "ready",
+        icon: "sliders"
+      },
+      {
+        id: "global-cctld-globe",
+        name: "Global ccTLD Globe",
+        file: "GlobalCctldGlobe.html",
+        category: "Data visualisation",
+        description: "Globe 3D interactif affichant les volumes de domaines ccTLD par pays sous forme de colonnes.",
+        status: "ready",
+        icon: "globe"
+      },
+      {
+        id: "crypto-dca",
+        name: "Simulateur DCA crypto",
+        file: "crypto-dca-widget.html",
+        category: "Finance",
+        description: "Calcule un total investi et une valorisation indicative selon le montant, la periodicite et la duree.",
+        status: "ready",
+        icon: "chart"
+      },
+      {
+        id: "analyse-textes",
+        name: "Atelier d'analyse",
+        file: "analyse-textes-widget.html",
+        category: "Analyse",
+        description: "Colle un texte, indique l'idee a defendre, choisis un plan et genere une trame exportable.",
+        status: "ready",
+        icon: "document"
+      },
+      {
+        id: "bibliotheque-documents",
+        name: "Bibliotheque de documents",
+        file: "bibliotheque-documents.html",
+        category: "Bibliotheques",
+        description: "Retrouve les documents, exports et fichiers importants produits avec Codex.",
+        status: "ready",
+        icon: "archive"
+      },
+      {
+        id: "bibliotheque-articles",
+        name: "Bibliotheque d'articles",
+        file: "library/index.html",
+        category: "Bibliotheques",
+        description: "Consulte les analyses, sources, favoris et versions enrichies depuis l'espace de lecture.",
+        status: "ready",
+        icon: "book"
+      }
+    ];
+
+    const iconPaths = {
+      split: '<path d="M7 8.5h10M7 15.5h10M12 3v18"/>',
+      bitcoin: '<path d="M8 4v16M13 4v16M7 7h7.5a3.2 3.2 0 0 1 0 6.4H7V7Zm0 6.4h8.2a3 3 0 0 1 0 6H7v-6Z"/>',
+      sliders: '<path d="M5 7h14M7 12h10M9 17h6"/><circle cx="7" cy="7" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/>',
+      globe: '<circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2 2.2 3 4.9 3 8s-1 5.8-3 8M12 4c-2 2.2-3 4.9-3 8s1 5.8 3 8"/>',
+      chart: '<path d="M5 17 10 9l4 5 5-9"/><path d="M5 20h14"/>',
+      document: '<path d="M6 4h12v16H6z"/><path d="M9 9h6M9 13h6M9 17h3"/>',
+      archive: '<path d="M5 6h14M5 12h14M5 18h10"/><path d="M4 4h16v16H4z"/>',
+      book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"/><path d="M8 7h8M8 11h6"/>'
+    };
+
+    const state = {
+      category: "Tous",
+      status: "Tous",
+      query: "",
+      sort: "category"
+    };
+
+    const categoryFilters = document.querySelector("#category-filters");
+    const statusFilters = document.querySelector("#status-filters");
+    const grid = document.querySelector("#widget-grid");
+    const search = document.querySelector("#search");
+    const sort = document.querySelector("#sort");
+    const clear = document.querySelector("#clear");
+    const libraryCount = document.querySelector("#library-count");
+    const resultCount = document.querySelector("#result-count");
+    const activeTags = document.querySelector("#active-tags");
+    const metricTotal = document.querySelector("#metric-total");
+    const metricCategories = document.querySelector("#metric-categories");
+    const metricReady = document.querySelector("#metric-ready");
+
+    function unique(values) {
+      return ["Tous", ...Array.from(new Set(values)).sort((a, b) => a.localeCompare(b, "fr"))];
+    }
+
+    function statusLabel(value) {
+      return value === "ready" ? "Pret" : value;
+    }
+
+    function countFor(key, value) {
+      if (value === "Tous") return widgets.length;
+      return widgets.filter((widget) => widget[key] === value).length;
+    }
+
+    function textIndex(widget) {
+      return [widget.name, widget.category, widget.description, widget.file, widget.status].join(" ").toLowerCase();
+    }
+
+    function getFilteredWidgets() {
+      const query = state.query.trim().toLowerCase();
+      let list = widgets.filter((widget) => {
+        const matchesCategory = state.category === "Tous" || widget.category === state.category;
+        const matchesStatus = state.status === "Tous" || widget.status === state.status;
+        const matchesQuery = !query || textIndex(widget).includes(query);
+        return matchesCategory && matchesStatus && matchesQuery;
+      });
+
+      list = list.sort((a, b) => {
+        if (state.sort === "title") return a.name.localeCompare(b.name, "fr");
+        if (state.sort === "status") return a.status.localeCompare(b.status, "fr") || a.name.localeCompare(b.name, "fr");
+        return a.category.localeCompare(b.category, "fr") || a.name.localeCompare(b.name, "fr");
+      });
+
+      return list;
+    }
+
+    function renderFilters() {
+      categoryFilters.innerHTML = unique(widgets.map((widget) => widget.category)).map((category) => `
+        <button class="filter-button ${state.category === category ? "is-active" : ""}" type="button" data-category="${category}">
+          <span>${category}</span>
+          <span class="filter-count">${countFor("category", category)}</span>
+        </button>
+      `).join("");
+
+      statusFilters.innerHTML = unique(widgets.map((widget) => widget.status)).map((status) => `
+        <button class="status-button ${state.status === status ? "is-active" : ""}" type="button" data-status="${status}">
+          <span>${statusLabel(status)}</span>
+          <span class="filter-count">${countFor("status", status)}</span>
+        </button>
+      `).join("");
+    }
+
+    function renderCards(list) {
+      if (!list.length) {
+        grid.innerHTML = '<div class="empty">Aucun widget ne correspond a ces filtres.</div>';
+        return;
+      }
+
+      grid.innerHTML = list.map((widget) => `
+        <a class="card" href="${widget.file}">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">${iconPaths[widget.icon] || iconPaths.document}</svg>
+            </span>
+            <span class="status-pill">${statusLabel(widget.status)}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-kicker">${widget.category}</div>
+            <h3>${widget.name}</h3>
+            <p>${widget.description}</p>
+          </div>
+          <div class="card-footer">
+            <span class="file-name">${widget.file}</span>
+            <span class="open-label">Ouvrir</span>
+          </div>
+        </a>
+      `).join("");
+    }
+
+    function renderActiveTags() {
+      const tags = [];
+      if (state.category !== "Tous") tags.push(state.category);
+      if (state.status !== "Tous") tags.push(statusLabel(state.status));
+      if (state.query.trim()) tags.push(`Recherche : ${state.query.trim()}`);
+      activeTags.innerHTML = tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+    }
+
+    function renderMetrics() {
+      const readyCount = widgets.filter((widget) => widget.status === "ready").length;
+      metricTotal.textContent = widgets.length;
+      metricCategories.textContent = new Set(widgets.map((widget) => widget.category)).size;
+      metricReady.textContent = readyCount;
+      libraryCount.textContent = `${widgets.length} outils`;
+    }
+
+    function render() {
+      const list = getFilteredWidgets();
+      renderFilters();
+      renderCards(list);
+      renderActiveTags();
+      resultCount.textContent = `${list.length} resultat${list.length > 1 ? "s" : ""}`;
+    }
+
+    categoryFilters.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      state.category = button.dataset.category;
+      render();
+    });
+
+    statusFilters.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-status]");
+      if (!button) return;
+      state.status = button.dataset.status;
+      render();
+    });
+
+    search.addEventListener("input", () => {
+      state.query = search.value;
+      render();
+    });
+
+    sort.addEventListener("change", () => {
+      state.sort = sort.value;
+      render();
+    });
+
+    clear.addEventListener("click", () => {
+      state.category = "Tous";
+      state.status = "Tous";
+      state.query = "";
+      state.sort = "category";
+      search.value = "";
+      sort.value = "category";
+      render();
+    });
+
+    renderMetrics();
+    render();
+  </script>
+  <script src="../../assets/ibiza-radio-widget.js" defer></script>
+</body>
+</html>

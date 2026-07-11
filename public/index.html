@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lazy App | Atelier numérique</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='white'/%3E%3Cpath d='M6 6h20v6h-8v8h-6V12H6z' fill='%23ff5a12'/%3E%3Cpath d='M18 20h8v6h-8z' fill='%23ff5a12'/%3E%3C/svg%3E"
+    />
+    <meta
+      name="description"
+      content="Lazy App imagine, construit et assemble des produits numériques durables, utiles et vendables."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ticker" id="ticker">
+      <div class="ticker-track" aria-label="Articles Intelblog" data-document-limit="10"></div>
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Lazy App accueil">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Lazy App</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Navigation principale">
+        <a href="#services" data-nav-section="services">Services</a>
+        <a href="#produits" data-nav-section="produits">Produits</a>
+        <a href="#widgets" data-nav-section="widgets">Widgets</a>
+        <a href="#realisations" data-nav-section="realisations">Realisations</a>
+      </nav>
+      <nav class="social-nav" aria-label="Reseaux sociaux">
+        <a href="https://www.facebook.com/people/Lazy-App/61559258175570/" aria-label="Facebook" target="_blank" rel="noreferrer">f</a>
+        <a href="https://www.instagram.com/lazy_app.fr/" aria-label="Instagram" target="_blank" rel="noreferrer">◎</a>
+        <a href="https://www.youtube.com/@Lazyapp" aria-label="YouTube" target="_blank" rel="noreferrer">▶</a>
+        <a href="https://www.linkedin.com/in/lazyapp/" aria-label="LinkedIn" target="_blank" rel="noreferrer">in</a>
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+    </header>
+
+    <nav class="mobile-nav" id="mobileNav" aria-label="Navigation mobile">
+      <a href="#services">Services</a>
+      <a href="#produits">Produits</a>
+      <a href="#widgets">Widgets</a>
+      <a href="#realisations">Realisations</a>
+    </nav>
+
+
+    <aside class="section-rail" aria-label="Sections">
+      <a class="rail-item rail-home active" href="#top" data-section="top"><b class="rail-icon">⌂</b><span>Accueil</span></a>
+      <a class="rail-item rail-services" href="#services" data-section="services"><b class="rail-icon">↔</b><span>Services</span></a>
+      <a class="rail-item rail-products" href="#produits" data-section="produits"><b class="rail-icon">◧</b><span>Produits</span></a>
+      <a class="rail-item rail-widgets" href="#widgets" data-section="widgets"><b class="rail-icon">▦</b><span>Widgets</span></a>
+      <a class="rail-item rail-work" href="#realisations" data-section="realisations"><b class="rail-icon">◫</b><span>Realisations</span></a>
+    </aside>
+
+    <main id="top">
+      <section class="hero section-observed" data-section="top">
+        <div class="hero-copy">
+          <h1>Simple, Rapide, Efficace...</h1>
+          <p>
+            En scrollant, vous allez decouvrir ce que votre client peut avoir entre les mains,
+            comment on relie votre situation actuelle a ce futur produit, puis les outils,
+            widgets et details pratiques qui rendent le systeme vivant.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#produits">Explorer les produits</a>
+            <a class="btn secondary" href="#realisations">Voir les realisations</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Systeme numerique modulaire">
+          <div class="cube c1"></div>
+          <div class="cube c2"></div>
+          <div class="cube c3"></div>
+          <div class="cube c4"></div>
+          <div class="cube c5"></div>
+          <div class="cube core"></div>
+          <div class="axis a1"></div>
+          <div class="axis a2"></div>
+        </div>
+      </section>
+
+      <section class="content-section section-observed services-section" id="services" data-section="services">
+        <div class="section-heading">
+          <div>
+            <span class="section-index services" aria-hidden="true">↔</span>
+            <h2>Services</h2>
+          </div>
+          <p class="services-intro">Chaque service correspond a une etape concrete du projet. Le carrousel montre le cycle complet : comprendre, concevoir, construire, deployer, faire evoluer et mesurer sans perdre le fil.</p>
+        </div>
+        <div class="services-3d" data-services-3d aria-roledescription="carrousel 3D" aria-label="Cycle de services Lazy App">
+          <div class="services-3d-stage">
+            <div class="services-3d-ring" data-services-ring>
+              <article class="services-3d-card" data-service-title="Comprendre" style="--accent: var(--blue);"><div class="services-3d-front"><span class="services-3d-index">01</span><h3>Comprendre</h3><ul class="services-3d-points"><li>Clarifier le contexte</li><li>Identifier les blocages</li><li>Fixer le bon niveau d'ambition</li></ul></div><div class="services-3d-back"><strong>Comprendre</strong></div></article>
+              <article class="services-3d-card" data-service-title="Concevoir" style="--accent: var(--pink);"><div class="services-3d-front"><span class="services-3d-index">02</span><h3>Concevoir</h3><ul class="services-3d-points"><li>Structurer l'idee</li><li>Definir les messages</li><li>Dessiner les parcours utiles</li></ul></div><div class="services-3d-back"><strong>Concevoir</strong></div></article>
+              <article class="services-3d-card" data-service-title="Construire" style="--accent: var(--green);"><div class="services-3d-front"><span class="services-3d-index">03</span><h3>Construire</h3><ul class="services-3d-points"><li>Developper proprement</li><li>Connecter les bons outils</li><li>Tester avant livraison</li></ul></div><div class="services-3d-back"><strong>Construire</strong></div></article>
+              <article class="services-3d-card" data-service-title="Deployer" style="--accent: var(--pink);"><div class="services-3d-front"><span class="services-3d-index">04</span><h3>Deployer</h3><ul class="services-3d-points"><li>Mettre en ligne proprement</li><li>Verifier performance et securite</li><li>Mesurer les resultats</li></ul></div><div class="services-3d-back"><strong>Deployer</strong></div></article>
+              <article class="services-3d-card" data-service-title="Faire evoluer" style="--accent: var(--violet);"><div class="services-3d-front"><span class="services-3d-index">05</span><h3>Faire evoluer</h3><ul class="services-3d-points"><li>Observer les usages</li><li>Ajuster ce qui freine</li><li>Ajouter les briques utiles</li></ul></div><div class="services-3d-back"><strong>Faire evoluer</strong></div></article>
+              <article class="services-3d-card" data-service-title="Mesurer" style="--accent: var(--teal);"><div class="services-3d-front"><span class="services-3d-index">06</span><h3>Mesurer</h3><ul class="services-3d-points"><li>Suivre les signaux utiles</li><li>Lire les resultats</li><li>Choisir la prochaine action</li></ul></div><div class="services-3d-back"><strong>Mesurer</strong></div></article>
+            </div>
+          </div>
+          <div class="services-3d-controls">
+            <button class="services-next-step" type="button" data-services-next aria-label="Passer au service suivant">
+              <span>Next step</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section section-observed products-section product-picker-section" id="produits" data-section="produits">
+        <div class="section-heading product-picker-heading">
+          <div>
+            <span class="section-index products" aria-hidden="true">◧</span>
+            <h2>Produits</h2>
+          </div>
+          <p class="product-picker-intro">Tirez 3 cartes. Elles revelent les sujets qui comptent maintenant, puis Lazy App transforme cette lecture en piste d'action concrete.</p>
+        </div>
+        <div class="product-draw-panel"><button class="product-draw-button" type="button" data-product-random-draw>Révéler ma trajectoire</button><span>Le tirage selectionne trois sujets, les retourne, puis ouvre la lecture.</span></div>
+        <div class="product-choice-grid" id="productGrid" data-product-picker aria-label="Choix de produits Lazy App">
+          <article class="product-choice-card" tabindex="0" role="button" aria-pressed="false" data-product-id="implantation" data-product-title="Implantation internet" data-product-axis="socle" style="--card-color: #2478ff; --card-soft: #e8f1ff;"><div class="product-choice-inner"><div class="product-choice-face product-choice-closed"><span class="product-choice-icon" aria-hidden="true">⌖</span><h3>Implantation internet</h3><p>Via des noms de domaines solides et memorisables.</p><span>Choisir</span></div><div class="product-choice-face product-choice-open"><h3>Domaines et presence</h3><p>Clarifier les noms, proteger les variantes utiles et organiser les redirections pour que votre activite ait une adresse nette.</p></div></div></article>
+          <article class="product-choice-card" tabindex="0" role="button" aria-pressed="false" data-product-id="storytelling" data-product-title="Storytelling du site" data-product-axis="recit" style="--card-color: #ff4b12; --card-soft: #fff0e9;"><div class="product-choice-inner"><div class="product-choice-face product-choice-closed"><span class="product-choice-icon" aria-hidden="true">◎</span><h3>Storytelling du site</h3><p>S'assurer que le site remplit vraiment sa fonction.</p><span>Choisir</span></div><div class="product-choice-face product-choice-open"><h3>Recit et conversion</h3><p>Reprendre le fil logique de la page pour que le visiteur comprenne vite l'offre, la preuve, la difference et l'action attendue.</p></div></div></article>
+          <article class="product-choice-card" tabindex="0" role="button" aria-pressed="false" data-product-id="image-marque" data-product-title="Image de marque" data-product-axis="identite" style="--card-color: #31b83b; --card-soft: #e9faeb;"><div class="product-choice-inner"><div class="product-choice-face product-choice-closed"><span class="product-choice-icon" aria-hidden="true">▣</span><h3>Image de marque</h3><p>Elaborer, transformer ou uniformiser l'identite.</p><span>Choisir</span></div><div class="product-choice-face product-choice-open"><h3>Coherence visuelle</h3><p>Aligner couleurs, typographies, ton, supports et signaux de confiance pour que chaque point de contact raconte la meme histoire.</p></div></div></article>
+          <article class="product-choice-card" tabindex="0" role="button" aria-pressed="false" data-product-id="diffusion" data-product-title="Canaux de diffusion" data-product-axis="traction" style="--card-color: #7b4cff; --card-soft: #f0ebff;"><div class="product-choice-inner"><div class="product-choice-face product-choice-closed"><span class="product-choice-icon" aria-hidden="true">⇄</span><h3>Canaux de diffusion</h3><p>Reseaux sociaux, LinkedIn, Waalaxy, mails, QR codes.</p><span>Choisir</span></div><div class="product-choice-face product-choice-open"><h3>Diffusion organisee</h3><p>Mettre en forme les canaux qui portent le message, mesurer les retours et eviter que les efforts partent dans tous les sens.</p></div></div></article>
+          <article class="product-choice-card" tabindex="0" role="button" aria-pressed="false" data-product-id="acquisition" data-product-title="Acquisition client" data-product-axis="vente" style="--card-color: #ff3f7a; --card-soft: #fff0f5;"><div class="product-choice-inner"><div class="product-choice-face product-choice-closed"><span class="product-choice-icon" aria-hidden="true">▤</span><h3>Acquisition client</h3><p>Concevoir, deployer, tester, suivre et fideliser.</p><span>Choisir</span></div><div class="product-choice-face product-choice-open"><h3>Parcours commercial</h3><p>Construire le canal d'acquisition, qualifier les demandes, suivre les relances et creer les bases de fidelisation ou multidetention.</p></div></div></article>
+          <article class="product-choice-card" tabindex="0" role="button" aria-pressed="false" data-product-id="crypto" data-product-title="Crypto transactions" data-product-axis="innovation" style="--card-color: #00bfa5; --card-soft: #e6fbf8;"><div class="product-choice-inner"><div class="product-choice-face product-choice-closed"><span class="product-choice-icon" aria-hidden="true">◌</span><h3>Crypto transactions</h3><p>Anticiper les usages, les paiements et les nouveaux clients.</p><span>Choisir</span></div><div class="product-choice-face product-choice-open"><h3>Transaction et confiance</h3><p>Explorer les cas concrets ou les paiements, preuves ou actifs numeriques peuvent ouvrir de nouveaux usages sans brouiller l'offre.</p></div></div></article>
+          <article class="product-choice-card" tabindex="0" role="button" aria-pressed="false" data-product-id="web3" data-product-title="Web3 innovateur" data-product-axis="innovation" style="--card-color: #111827; --card-soft: #eef1f6;"><div class="product-choice-inner"><div class="product-choice-face product-choice-closed"><span class="product-choice-icon" aria-hidden="true">◇</span><h3>Web3 innovateur</h3><p>Anticiper, experimenter et rester en avance.</p><span>Choisir</span></div><div class="product-choice-face product-choice-open"><h3>Innovation utile</h3><p>Identifier les briques Web3 qui peuvent servir la relation client, la preuve, la communaute ou les actifs sans effet gadget.</p></div></div></article>
+          <button class="collection-more-card product-more-card" type="button" data-section-more="produits" aria-expanded="false"><strong>More</strong><span>Afficher toute la section</span></button>
+        </div>
+        <p class="product-choice-status" data-product-status>0 / 3 cartes revelees</p>
+        <div class="product-choice-modal" id="productChoiceModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="productChoiceTitle">
+          <div class="product-choice-dialog">
+            <button class="product-choice-close" type="button" data-product-modal-close aria-label="Fermer">×</button>
+            <span class="product-choice-kicker">Tirage Lazy App</span>
+            <h3 id="productChoiceTitle">Vos 3 cartes ouvrent une lecture.</h3>
+            <p data-product-perspective></p>
+            <div class="product-choice-selected" data-product-selected></div>
+            <form class="product-choice-questions" data-product-question-form>
+              <fieldset><legend>Votre presence en ligne est-elle deja claire et exploitable ?</legend><label><input type="radio" name="presence" value="oui" required> Oui</label><label><input type="radio" name="presence" value="non"> Non</label></fieldset>
+              <fieldset><legend>Votre identite visuelle est-elle coherente sur tous vos supports ?</legend><label><input type="radio" name="identite" value="oui" required> Oui</label><label><input type="radio" name="identite" value="non"> Non</label></fieldset>
+              <fieldset><legend>Suivez-vous deja les demandes, relances et conversions ?</legend><label><input type="radio" name="suivi" value="oui" required> Oui</label><label><input type="radio" name="suivi" value="non"> Non</label></fieldset>
+              <fieldset><legend>Avez-vous deja teste un usage IA, wallet, Web3 ou paiement innovant ?</legend><label><input type="radio" name="innovation" value="oui" required> Oui</label><label><input type="radio" name="innovation" value="non"> Non</label></fieldset>
+              <fieldset><legend>Avez-vous des contenus, liens ou fichiers de reference a partager ?</legend><label><input type="radio" name="matiere" value="oui" required> Oui</label><label><input type="radio" name="matiere" value="non"> Non</label></fieldset>
+              <button type="submit">Voir l'etat des lieux</button>
+            </form>
+            <div class="product-choice-result" data-product-result hidden>
+              <h4>Etat des lieux</h4><p data-product-assessment></p><h4>Perspective Lazy App</h4><p data-product-offer></p>
+              <form class="product-choice-contact" data-product-contact-form>
+                <label>Votre demande libre<textarea name="message" rows="4" placeholder="Expliquez ce que vous souhaitez construire, corriger ou tester."></textarea></label>
+                <div class="product-choice-contact-row"><label>Nom <input name="nom" type="text" autocomplete="family-name"></label><label>Prenom <input name="prenom" type="text" autocomplete="given-name"></label></div>
+                <div class="product-choice-contact-row"><label>Email <input name="email" type="email" autocomplete="email"></label><label>Telephone <input name="telephone" type="tel" autocomplete="tel"></label></div>
+                <label>Liens utiles<textarea name="liens" rows="3" placeholder="Site actuel, reseaux, Drive, Dropbox, Notion, documents cloud..."></textarea></label>
+                <label>Fichiers via lien cloud<textarea name="fichiers" rows="3" placeholder="Collez ici les liens de dossiers ou fichiers a consulter."></textarea></label>
+                <button type="submit">Preparer l'email</button>
+                <p>Votre demande sera etudiee avec un retour sous 3 jours ouvres.</p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section section-observed work-section" id="widgets" data-section="widgets">
+        <div class="section-heading section-heading-with-copy">
+          <div>
+            <span class="section-index work" aria-hidden="true">▦</span>
+            <h2>Widgets et autres creations</h2>
+          </div>
+          <p class="widgets-intro">Un site qui accueille ne suffit pas toujours. Les widgets donnent une raison de rester, d'essayer, de comprendre et de passer a l'action : ils transforment une visite en experience utile.</p>
+        </div>
+        <div class="carousel-shell">
+          <button class="carousel-control prev" type="button" aria-label="Projet precedent">‹</button>
+          <div class="carousel-window">
+            <div class="carousel-track" id="carouselTrack">
+              <article class="work-card widget-carousel-card" data-widget-card="cryptoclisme">
+                <div class="work-visual widget-work-visual widget-preview-visual">
+                  <img src="tools/widgets/previews/cryptoclisme.png" alt="Apercu du widget CryptoClisme">
+                  <span class="widget-preview-label">CryptoClisme</span>
+                </div>
+                <div>
+                  <span class="work-kicker">Analyse LinkedIn</span>
+                  <h3>CryptoClisme</h3>
+                  <p>Analyse un post LinkedIn sceptique et prepare une reponse factuelle dans le ton du contradicteur ironique.</p>
+                  <a href="tools/widgets/CryptoClisme.html" class="widget-open-link">Ouvrir le widget</a>
+                </div>
+              </article>
+              <article class="work-card widget-carousel-card" data-widget-card="crypto-market-pulse">
+                <div class="work-visual widget-work-visual widget-preview-visual">
+                  <img src="tools/widgets/previews/crypto-market-pulse.png" alt="Apercu du widget Crypto Market Pulse">
+                  <span class="widget-preview-label">Crypto Market Pulse</span>
+                </div>
+                <div>
+                  <span class="work-kicker">Marches crypto</span>
+                  <h3>Crypto Market Pulse</h3>
+                  <p>Tableau de suivi des marches crypto inspire de CryptoNight avec prix, tendances, alertes et exports locaux.</p>
+                  <a href="tools/widgets/CryptoMarketPulse.html" class="widget-open-link">Ouvrir le widget</a>
+                </div>
+              </article>
+              <article class="work-card widget-carousel-card" data-widget-card="tapemix">
+                <div class="work-visual widget-work-visual widget-preview-visual">
+                  <img src="tools/widgets/previews/tapemix.png" alt="Apercu du widget TapeMix">
+                  <span class="widget-preview-label">TapeMix</span>
+                </div>
+                <div>
+                  <span class="work-kicker">Audio</span>
+                  <h3>TapeMix</h3>
+                  <p>Mixer DJ local avec deux decks, crossfader, EQ, pitch, visualizer et enregistrement du master.</p>
+                  <a href="tools/widgets/TapeMix.html" class="widget-open-link">Ouvrir le widget</a>
+                </div>
+              </article>
+              <article class="work-card widget-carousel-card" data-widget-card="global-cctld-globe">
+                <div class="work-visual widget-work-visual widget-preview-visual">
+                  <img src="tools/widgets/previews/global-cctld-globe.png" alt="Apercu du widget Global ccTLD Globe">
+                  <span class="widget-preview-label">Global ccTLD Globe</span>
+                </div>
+                <div>
+                  <span class="work-kicker">Data visualisation</span>
+                  <h3>Global ccTLD Globe</h3>
+                  <p>Globe 3D interactif affichant les volumes de domaines ccTLD par pays sous forme de colonnes.</p>
+                  <a href="tools/widgets/GlobalCctldGlobe.html" class="widget-open-link">Ouvrir le widget</a>
+                </div>
+              </article>
+              <article class="work-card widget-carousel-card" data-widget-card="crypto-dca">
+                <div class="work-visual widget-work-visual widget-preview-visual">
+                  <img src="tools/widgets/previews/crypto-dca.png" alt="Apercu du widget Simulateur DCA crypto">
+                  <span class="widget-preview-label">Simulateur DCA crypto</span>
+                </div>
+                <div>
+                  <span class="work-kicker">Finance</span>
+                  <h3>Simulateur DCA crypto</h3>
+                  <p>Calcule un total investi et une valorisation indicative selon le montant, la periodicite et la duree.</p>
+                  <a href="tools/widgets/crypto-dca-widget.html" class="widget-open-link">Ouvrir le widget</a>
+                </div>
+              </article>
+              <article class="work-card widget-carousel-card" data-widget-card="analyse-textes">
+                <div class="work-visual widget-work-visual widget-preview-visual">
+                  <img src="tools/widgets/previews/analyse-textes.png" alt="Apercu du widget Atelier d'analyse">
+                  <span class="widget-preview-label">Atelier d'analyse</span>
+                </div>
+                <div>
+                  <span class="work-kicker">Analyse</span>
+                  <h3>Atelier d'analyse</h3>
+                  <p>Colle un texte, indique l'idee a defendre, choisis un plan et genere une trame exportable.</p>
+                  <a href="tools/widgets/analyse-textes-widget.html" class="widget-open-link">Ouvrir le widget</a>
+                </div>
+              </article>
+              <article class="work-card widget-carousel-card" data-widget-card="bibliotheque-documents">
+                <div class="work-visual widget-work-visual widget-preview-visual">
+                  <img src="tools/widgets/previews/bibliotheque-documents.png" alt="Apercu du widget Bibliotheque de documents">
+                  <span class="widget-preview-label">Bibliotheque de documents</span>
+                </div>
+                <div>
+                  <span class="work-kicker">Bibliotheques</span>
+                  <h3>Bibliotheque de documents</h3>
+                  <p>Retrouve les documents, exports et fichiers importants produits avec Codex.</p>
+                  <a href="tools/widgets/bibliotheque-documents.html" class="widget-open-link">Ouvrir le widget</a>
+                </div>
+              </article>
+            </div>
+          </div>
+          <button class="carousel-control next" type="button" aria-label="Projet suivant">›</button>
+        </div>
+        <div class="carousel-dots" id="carouselDots" aria-label="Pagination du carrousel"></div>
+
+      </section>
+
+      <section class="content-section section-observed portfolio-section" id="realisations" data-section="realisations">
+        <div class="section-heading section-heading-with-copy">
+          <div>
+            <span class="section-index work" aria-hidden="true">◫</span>
+            <h2>Realisations</h2>
+          </div>
+          <p class="portfolio-intro">Retrouvez les widgets et les idees en contexte. En parcourant ces realisations, notez ce qui vous parle : rythme, interaction, preuve, interface, ton ou parcours.</p>
+        </div>
+        <div class="portfolio-grid">
+          <article class="lift-card site-card">
+            <a class="site-preview" href="https://lecomptoirlibanais.net" target="_blank" rel="noreferrer" aria-label="Ouvrir LeComptoirLibanais.net">
+              <img src="assets/site-previews/lecomptoirlibanais.png" alt="Previsualisation du site LeComptoirLibanais.net" loading="lazy">
+            </a>
+            <div class="site-meta work-kicker"><span class="meta-chip meta-family">Restaurant</span><span class="meta-chip meta-type">Site vitrine</span><span class="meta-chip meta-state is-live">En ligne</span></div>
+            <h3>LeComptoirLibanais.net</h3>
+            <p>Une presence claire pour presenter l'adresse, l'ambiance, les menus et les informations utiles.</p>
+            <a class="site-card-link" href="https://lecomptoirlibanais.net" target="_blank" rel="noreferrer">Ouvrir le site</a>
+          </article>
+          <article class="lift-card site-card">
+            <a class="site-preview" href="https://chezabdel2.netlify.app/" target="_blank" rel="noreferrer" aria-label="Ouvrir ChezAbdel2.com">
+              <img src="assets/site-previews/chezabdel2.png" alt="Previsualisation du site ChezAbdel2.com" loading="lazy">
+            </a>
+            <div class="site-meta work-kicker"><span class="meta-chip meta-family">Commerce local</span><span class="meta-chip meta-type">Site vitrine</span><span class="meta-chip meta-state is-live">En ligne</span></div>
+            <h3>ChezAbdel2.com</h3>
+            <p>Un site de proximite pour rendre lisibles les produits, les horaires, le contact et l'esprit du lieu.</p>
+            <a class="site-card-link" href="https://chezabdel2.netlify.app/" target="_blank" rel="noreferrer">Ouvrir le site</a>
+          </article>
+          <article class="lift-card site-card is-progress">
+            <a class="site-preview" href="https://pureowner.com/" target="_blank" rel="noreferrer" aria-label="Ouvrir PureOwner.com">
+              <img src="assets/site-previews/pureowner.png" alt="Previsualisation du site PureOwner.com" loading="lazy">
+              <em>Work in progress</em>
+            </a>
+            <div class="site-meta work-kicker"><span class="meta-chip meta-family">Identite numerique</span><span class="meta-chip meta-type">Web3</span><span class="meta-chip meta-state is-progress">En travaux</span></div>
+            <h3>PureOwner.com</h3>
+            <p>Une experience en construction autour de la propriete, de l'identite et des actifs numeriques.</p>
+            <a class="site-card-link" href="https://pureowner.com/" target="_blank" rel="noreferrer">Ouvrir le site</a>
+          </article>
+          <article class="lift-card site-card">
+            <a class="site-preview" href="https://hempicurien.com/" target="_blank" rel="noreferrer" aria-label="Ouvrir Hempicurien.com">
+              <img src="assets/site-previews/hempicurien.png" alt="Previsualisation du site Hempicurien.com" loading="lazy">
+            </a>
+            <div class="site-meta work-kicker"><span class="meta-chip meta-family">Ecosysteme</span><span class="meta-chip meta-type">Site specialise</span><span class="meta-chip meta-state is-live">En ligne</span></div>
+            <h3>Hempicurien.com</h3>
+            <p>Un univers editorial et commercial pour structurer une presence lisible, utile et durable.</p>
+            <a class="site-card-link" href="https://hempicurien.com/" target="_blank" rel="noreferrer">Ouvrir le site</a>
+          </article>
+          <button class="collection-more-card" type="button" data-section-more="realisations" aria-expanded="false"><strong>More</strong><span>Voir toutes les realisations</span></button>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+    </main>
+
+
+    <div class="visit-recap-modal" id="visitRecapModal" aria-hidden="true">
+      <div class="visit-recap-backdrop" data-visit-recap-close></div>
+      <section class="visit-recap-dialog" role="dialog" aria-modal="true" aria-labelledby="visitRecapTitle" tabindex="-1">
+        <button class="visit-recap-close" type="button" aria-label="Fermer" data-visit-recap-close>×</button>
+        <span class="visit-recap-kicker">Retour d'experience</span>
+        <h2 id="visitRecapTitle">Votre parcours nous interesse.</h2>
+        <p>Les widgets et realisations consultes peuvent devenir une vraie base de discussion. Cochez rapidement ce qui vous parle, ce qui vous laisse froid, ou ce que vous voulez retravailler.</p>
+        <div class="visit-recap-list" data-visit-recap-list></div>
+        <div class="visit-recap-actions">
+          <button type="button" data-contact-open>Transmettre mon retour</button>
+          <button type="button" data-visit-recap-clear>Repartir a zero</button>
+        </div>
+      </section>
+    </div>
+    <button class="visit-recap-trigger" type="button" data-visit-recap-open hidden>Retour d'experience</button>
+
+    <div class="contact-modal" id="contactModal" aria-hidden="true">
+      <div class="contact-backdrop" data-contact-close></div>
+      <section class="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="contactTitle" tabindex="-1">
+        <div class="contact-dialog-head">
+          <div>
+            <span>Demande de projet</span>
+            <h2 id="contactTitle">Parlez-nous de votre besoin</h2>
+            <p>Votre demande sera etudiee avec attention. Un retour vous sera fait sous 3 jours ouvres.</p>
+          </div>
+          <button class="contact-close" type="button" aria-label="Fermer le formulaire" data-contact-close>×</button>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <fieldset>
+            <legend>Coordonnees</legend>
+            <div class="form-grid two">
+              <label>Nom<input name="nom" type="text" autocomplete="family-name" required></label>
+              <label>Prenom<input name="prenom" type="text" autocomplete="given-name" required></label>
+              <label>Telephone<input name="telephone" type="tel" autocomplete="tel" required></label>
+              <label>Email<input name="email" type="email" autocomplete="email" required></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Liens utiles</legend>
+            <p class="form-hint">Collez un lien puis expliquez pourquoi il est utile. Une nouvelle ligne apparait automatiquement.</p>
+            <div class="link-fields" id="linkFields">
+              <div class="link-row">
+                <label>Lien<input name="lien[]" type="url" placeholder="https://..."></label>
+                <label>Explication<textarea name="lienExplication[]" rows="2" placeholder="Site actuel, reference, document, concurrent, exemple..."></textarea></label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Fichiers</legend>
+            <div class="upload-box">
+              <label class="file-drop">Ajouter des fichiers<input id="projectFiles" name="fichiers" type="file" multiple></label>
+              <label>Explication des fichiers<textarea name="fichiersExplication" rows="3" placeholder="Precisez ce que contiennent les fichiers, ce qu'il faut regarder, et leur priorite."></textarea></label>
+            </div>
+            <p class="form-hint" id="fileSummary">Aucun fichier selectionne. Les noms seront repris dans l'email ; vous pourrez joindre les fichiers depuis votre messagerie.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Services souhaites</legend>
+            <details class="service-select">
+              <summary>Choisir un ou plusieurs services</summary>
+              <div class="service-options">
+                <label><input type="checkbox" name="services" value="Prospection commerciale"> Prospection commerciale</label>
+                <label><input type="checkbox" name="services" value="Attractivite du site"> Attractivite du site</label>
+                <label><input type="checkbox" name="services" value="Prospection automatisee"> Prospection automatisee</label>
+                <label><input type="checkbox" name="services" value="Constellation domain Web3"> Constellation domain Web3</label>
+                <label><input type="checkbox" name="services" value="Site vitrine ou landing page"> Site vitrine ou landing page</label>
+                <label><input type="checkbox" name="services" value="Widget ou outil interne"> Widget ou outil interne</label>
+                <label><input type="checkbox" name="services" value="Automatisation et workflow"> Automatisation et workflow</label>
+                <label><input type="checkbox" name="services" value="Bibliotheque de contenus"> Bibliotheque de contenus</label>
+              </div>
+            </details>
+          </fieldset>
+
+          <fieldset>
+            <legend>Expression libre</legend>
+            <label>Ce que vous souhaitez obtenir<textarea name="souhait" rows="5" placeholder="Expliquez votre contexte, votre objectif, ce qui existe deja, vos contraintes, vos attentes et ce que vous voulez que Lazy App construise avec vous." required></textarea></label>
+          </fieldset>
+
+          <div class="form-status" id="contactStatus" role="status" aria-live="polite">
+            La demande sera envoyee a nicolas@lazyapp.fr et analysee sous 3 jours ouvres.
+          </div>
+
+          <div class="contact-actions">
+            <button class="btn secondary" type="button" data-contact-close>Annuler</button>
+            <button class="btn primary" type="submit">Preparer l'email</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <footer class="footer footer-standard" id="cafe" data-footer-observed data-footer-workshop>
+      <div class="footer-standard-bar">
+        <a class="brand footer-brand" href="#top" aria-label="Lazy App accueil">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>Lazy App</span>
+        </a>
+
+        <span class="footer-nav-spacer" aria-hidden="true"></span>
+        <div class="footer-right-stack">
+          <nav class="footer-social" aria-label="Reseaux sociaux">
+            <a href="https://www.facebook.com/people/Lazy-App/61559258175570/" aria-label="Facebook" target="_blank" rel="noreferrer">f</a>
+            <a href="https://www.instagram.com/lazy_app.fr/" aria-label="Instagram" target="_blank" rel="noreferrer">◎</a>
+            <a href="https://www.youtube.com/@Lazyapp" aria-label="YouTube" target="_blank" rel="noreferrer">▶</a>
+            <a href="https://www.linkedin.com/in/lazyapp/" aria-label="LinkedIn" target="_blank" rel="noreferrer">in</a>
+          </nav>
+          <div class="footer-legal-stack">
+            <button class="footer-legal-button footer-legal-left" type="button">Mentions legales</button>
+            <button class="footer-legal-button footer-legal-right" type="button">Confidentialite</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="footer-workshop" aria-label="Atelier technique d'echange">
+        <div class="footer-faq-panel">
+          <span class="footer-kicker">Atelier technique</span>
+          <h2>Faisons Connaissance</h2>
+          <div class="footer-mini-faq">
+            <details open>
+              <summary>Que dois-je preparer ?</summary>
+              <p>Les liens utiles, les fichiers, les exemples, les blocages et ce que vous voulez obtenir a la fin.</p>
+            </details>
+            <details>
+              <summary>Que se passe-t-il apres l'envoi ?</summary>
+              <p>Lazy App lit la matiere, qualifie le besoin et revient avec une premiere piste concrete sous 3 jours ouvres.</p>
+            </details>
+            <details>
+              <summary>Faut-il deja savoir exactement quoi faire ?</summary>
+              <p>Non. L'atelier sert justement a transformer une intention floue en prochain livrable clair.</p>
+            </details>
+          </div>
+        </div>
+
+        <form class="footer-client-form" aria-label="Formulaire atelier client">
+          <div class="footer-form-row">
+            <label>Nom<input type="text" name="nom" autocomplete="family-name"></label>
+            <label>Prenom<input type="text" name="prenom" autocomplete="given-name"></label>
+          </div>
+          <div class="footer-form-row">
+            <label>Email<input type="email" name="email" autocomplete="email"></label>
+            <label>Telephone<input type="tel" name="telephone" autocomplete="tel"></label>
+          </div>
+          <label>Liens utiles<textarea name="liens" rows="3" placeholder="Site actuel, exemples, Drive, Notion, maquettes..."></textarea></label>
+          <label>Fichiers utiles<input type="file" name="fichiers" multiple></label>
+          <label>Intentions et questions<textarea name="intentions" rows="5" placeholder="Ce que vous voulez obtenir, ce qui bloque, ce que vous imaginez..."></textarea></label>
+          <button class="footer-form-submit" type="button" data-contact-open>Preparer l'echange</button>
+        </form>
+      </section>
+    </footer>
+
+    <script src="script.js"></script>
+  <script src="assets/ibiza-radio-widget.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CryptoClisme - Analyse LinkedIn</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%231b6f69'/%3E%3Cpath d='M20 24h24M20 40h24M32 10v44' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f5ef;
+      --ink: #171716;
+      --muted: #68635a;
+      --line: #d9d2c5;
+      --panel: #fffdf8;
+      --panel-strong: #efe9dd;
+      --accent: #1b6f69;
+      --accent-2: #b34b32;
+      --accent-3: #2f4b7c;
+      --shadow: 0 18px 45px rgba(32, 28, 21, .1);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(27, 111, 105, .08), transparent 36%),
+        linear-gradient(315deg, rgba(179, 75, 50, .08), transparent 34%),
+        var(--bg);
+      color: var(--ink);
+    }
+
+    button,
+    textarea,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(27, 111, 105, .5);
+    }
+
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    button.ghost {
+      background: transparent;
+    }
+
+    header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 20px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 35% 25%, #fff 0 10%, #2d9188 11% 28%, #173f3d 29% 100%);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .6), 0 10px 28px rgba(27, 111, 105, .22);
+      flex: 0 0 auto;
+    }
+
+    .mark svg {
+      width: 23px;
+      height: 23px;
+      color: #fff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.2rem, 3vw, 1.9rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px 32px;
+      display: grid;
+      grid-template-columns: minmax(300px, .95fr) minmax(340px, 1.2fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .surface {
+      background: rgba(255, 253, 248, .88);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .input-pane,
+    .output-pane {
+      padding: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      color: #38342d;
+      margin-bottom: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 420px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fff;
+      color: var(--ink);
+      line-height: 1.5;
+      outline: none;
+    }
+
+    textarea:focus,
+    input:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(27, 111, 105, .12);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .settings {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    select,
+    input {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 10px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .analysis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      background: var(--panel-strong);
+      border-radius: var(--radius);
+      padding: 10px;
+      min-height: 80px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .metric span {
+      font-size: .95rem;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      margin: 4px 0 12px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      min-height: 42px;
+      padding: 0 8px;
+      color: var(--muted);
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab.is-active {
+      color: var(--ink);
+      border-color: var(--accent-2);
+      font-weight: 800;
+    }
+
+    .result {
+      display: none;
+    }
+
+    .result.active {
+      display: block;
+    }
+
+    .result pre {
+      margin: 0;
+      min-height: 350px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 15px;
+      line-height: 1.55;
+      font-family: inherit;
+      color: #211f1b;
+    }
+
+    .result-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .hint {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.45;
+    }
+
+    .empty {
+      min-height: 510px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .52);
+    }
+
+    .empty strong {
+      display: block;
+      color: var(--ink);
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 900px) {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      textarea {
+        min-height: 300px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      header,
+      main {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .settings,
+      .analysis {
+        grid-template-columns: 1fr;
+      }
+
+      .controls button {
+        flex: 1 1 150px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="lazyapp-widget-shell.css">
+</head>
+<body>
+  <div class="lazyapp-widget-back"><span>Lazy App · Widget dedie</span><a href="../../index.html#realisations">Retour au site</a></div>
+  <header>
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M7 8.5h10M7 15.5h10M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1>CryptoClisme</h1>
+        <p class="subtitle">Transforme une critique LinkedIn en réponse factuelle, subtile et publiable.</p>
+      </div>
+    </div>
+    <button class="ghost" id="copyPromptTop" type="button">Copier le prompt maître</button>
+  </header>
+
+  <main>
+    <section class="surface input-pane" aria-label="Article à analyser">
+      <label for="sourceText">Post ou article LinkedIn</label>
+      <textarea id="sourceText" placeholder="Colle ici le post anti-crypto, anti-Web3 ou sceptique à analyser..."></textarea>
+
+      <div class="settings">
+        <div class="field">
+          <label for="tone">Style éditorial</label>
+          <select id="tone">
+            <option value="cryptoclysme">Contradicteur ironique</option>
+            <option value="subtle">Subtil</option>
+            <option value="sharp">Plus piquante</option>
+            <option value="calm">Très calme</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="length">Longueur</label>
+          <select id="length">
+            <option value="medium">Standard LinkedIn</option>
+            <option value="short">Courte</option>
+            <option value="long">Développée</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="primary" id="generate" type="button">Analyser et rédiger</button>
+        <button id="clear" type="button">Effacer</button>
+      </div>
+      <p class="hint">L’outil reste volontairement prudent : il n’invente pas de chiffres, ne parle pas rendement, et privilégie les faits généraux vérifiables.</p>
+    </section>
+
+    <section class="surface output-pane" aria-label="Résultats">
+      <div id="emptyState" class="empty">
+        <div>
+          <strong>En attente d’un texte</strong>
+          Colle un post, lance l’analyse, puis copie la version qui correspond au contexte.
+        </div>
+      </div>
+
+      <div id="results" hidden>
+        <div class="analysis" aria-label="Analyse rapide">
+          <div class="metric"><strong>Ton détecté</strong><span id="detectedTone"></span></div>
+          <div class="metric"><strong>Angle sensible</strong><span id="detectedFear"></span></div>
+          <div class="metric"><strong>Pivot utile</strong><span id="detectedPivot"></span></div>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <button class="tab is-active" role="tab" aria-selected="true" data-tab="full">Réponse</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="short">Variante courte</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="comments">Commentaires</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="prompt">Prompt</button>
+        </div>
+
+        <div class="result active" id="tab-full">
+          <pre id="fullOutput"></pre>
+          <div class="result-actions"><button data-copy="fullOutput" type="button">Copier</button></div>
+        </div>
+
+        <div class="result" id="tab-short">
+          <pre id="shortOutput"></pre>
+          <div class="result-actions"><button data-copy="shortOutput" type="button">Copier</button></div>
+        </div>
+
+        <div class="result" id="tab-comments">
+          <pre id="commentsOutput"></pre>
+          <div class="result-actions"><button data-copy="commentsOutput" type="button">Copier</button></div>
+        </div>
+
+        <div class="result" id="tab-prompt">
+          <pre id="promptOutput"></pre>
+          <div class="result-actions"><button data-copy="promptOutput" type="button">Copier</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const sourceText = document.querySelector("#sourceText");
+    const toneInput = document.querySelector("#tone");
+    const lengthInput = document.querySelector("#length");
+    const emptyState = document.querySelector("#emptyState");
+    const results = document.querySelector("#results");
+    const detectedTone = document.querySelector("#detectedTone");
+    const detectedFear = document.querySelector("#detectedFear");
+    const detectedPivot = document.querySelector("#detectedPivot");
+    const fullOutput = document.querySelector("#fullOutput");
+    const shortOutput = document.querySelector("#shortOutput");
+    const commentsOutput = document.querySelector("#commentsOutput");
+    const promptOutput = document.querySelector("#promptOutput");
+
+    const masterPrompt = `Tu es "CryptoClisme", aussi appele "Le Cryptoclysme": un assistant d'ecriture specialise dans la reponse subtile aux contenus anti-crypto publies sur LinkedIn.
+
+Concept central:
+Tu es un decodeur, pas un militant.
+Tu incarnes un chroniqueur sarcastique qui repond aux critiques du Web3 sans agressivite.
+Tu prends le role du contradicteur ironique: tu commences par etre d'accord avec les inquietudes de ton interlocuteur, puis tu demontes progressivement les idees recues avec des faits verifiables.
+
+Exemple de ton:
+"Bienvenue dans le pire scenario imaginable.
+Imaginez un monde ou vous seriez enfin proprietaire de votre identite numerique.
+Horrible.
+Imaginez maintenant que votre nom sur Internet vous appartienne reellement.
+Encore pire.
+Et si, en plus, aucune entreprise ne pouvait vous le retirer parce qu'elle a change ses conditions d'utilisation...
+La, on touche au drame."
+
+Cette ironie doit toujours rester elegante, pedagogique et factuelle. Elle ne doit jamais transformer la reponse en propagande.
+
+Posture:
+- Tu ne cherches pas a avoir raison frontalement.
+- Tu ne contredis pas simplement.
+- Tu pars des propos de la personne et tu racontes des faits verifiables, comme si tu n'avais pas compris que la personne etait anti-decentralisation.
+- Tu es contre le trading et la speculation sur le travail d'autrui.
+- Tu respectes uniquement la speculation prudente sur des biens ou actifs digitaux possedes directement.
+- Tu vois les cryptomonnaies comme l'initiateur possible d'un standard universel d'echange et de propriete numerique d'humain a humain, sans tiers obligatoire.
+- Tu restes vigilant face aux acteurs qui utilisent la finance ou la domination pour entraver les libertes humaines.
+- Tu n'essaies jamais de convaincre. Tu aides le lecteur a comprendre les technologies derriere les gros titres.
+
+Objectif:
+Quand je colle un article LinkedIn, produis une reponse qui reprend le ton, le rythme, le niveau de langage et la structure argumentative de l'auteur, puis retourne progressivement son propos pour expliquer les usages reels des cryptos, du Web3, de la blockchain, des wallets, des NFT utiles, des noms de domaine Web3 et de la propriete numerique.
+
+La reponse ne doit jamais sembler etre une propagande crypto. Elle doit donner l'impression d'etre une continuation logique de l'article original, tout en deplacant progressivement le lecteur vers une comprehension plus nuancee et plus favorable au Web3.
+
+Methode:
+1. Lis attentivement l'article fourni.
+2. Identifie le ton, les arguments principaux, les peurs, les raccourcis, les angles morts et le vocabulaire.
+3. Resume la critique implicite ou explicite.
+4. Identifie les faits exacts.
+5. Identifie les raccourcis ou amalgames.
+6. Reponds dans un style proche de l'auteur.
+7. Commence par valider une partie du constat.
+8. Introduis progressivement des informations factuelles.
+9. Explique la technologie concernee de maniere pedagogique.
+10. Retourne l'argument principal sans agressivite.
+11. Termine par une ouverture intelligente, presque evidente.
+
+Contraintes:
+- Ne jamais insulter l'auteur.
+- Ne jamais dire "vous n'avez pas compris".
+- Ne jamais etre militant.
+- Ne jamais utiliser de jargon non explique.
+- Ne jamais promettre que les cryptos vont tout remplacer.
+- Ne jamais faire de conseil financier.
+- Ne jamais parler de prix ou de rendement sauf si l'article l'evoque.
+- Ne jamais inventer de faits.
+- Eviter les phrases trop enthousiastes.
+- Preferer: "il est possible que", "on observe deja", "ce que cela revele", "ce que cela permet".
+- Ne jamais repondre par l'opinion seule.
+
+Angle editorial:
+Le Web3 n'est pas presente comme un casino. Il est presente comme une evolution de la propriete numerique.
+
+Format:
+1. Titre LinkedIn court et accrocheur.
+2. Reponse LinkedIn complete, prete a publier.
+3. Variante plus courte.
+4. 5 commentaires courts possibles sous le post original.
+
+Style:
+Ironique, elegant, intelligent, avec beaucoup d'autoderision, legerement provocateur, jamais agressif.
+
+Regle d'or:
+Ne jamais repondre par l'opinion.
+Toujours repondre par des faits, des explications techniques accessibles, du contexte historique, et, lorsque c'est pertinent, une pointe d'ironie.
+
+Conclusion possible:
+"On peut etre sceptique. Mais il est toujours plus interessant de comprendre une technologie avant de decider si elle merite ou non notre attention."`;
+
+    const pivots = {
+      scam: {
+        fear: "arnaques et promesses creuses",
+        pivot: "distinguer casino, infrastructure et propriete",
+        fact: "Le fait qu'un secteur attire des escroqueries ne suffit pas a decrire toute l'infrastructure. Internet a connu la meme confusion entre usages douteux, speculation et protocoles durables.",
+        idea: "La question devient moins: faut-il aimer les cryptos ? Elle devient: quels usages restent utiles quand on retire le bruit du trading ?"
+      },
+      ecology: {
+        fear: "impact energetique",
+        pivot: "comparer les mecanismes plutot que le mot crypto",
+        fact: "Toutes les blockchains n'utilisent pas le meme mecanisme de validation. Certaines consomment beaucoup d'energie, d'autres reposent sur des modeles differents.",
+        idea: "On peut critiquer l'empreinte de certains reseaux tout en regardant ce que permet un registre public verifiable."
+      },
+      regulation: {
+        fear: "absence de cadre",
+        pivot: "separer encadrement et confiscation du pouvoir d'usage",
+        fact: "La regulation peut proteger les utilisateurs sans rendre necessairement impossible la possession directe d'un actif numerique.",
+        idea: "Le point sensible est de savoir qui garde la cle: l'utilisateur, une plateforme, ou un intermediaire qui peut changer les regles."
+      },
+      identity: {
+        fear: "donnees personnelles et plateformes",
+        pivot: "wallet comme identite portable",
+        fact: "Un wallet peut servir d'adresse et de preuve de controle, sans obliger une application a stocker toute l'identite civile de l'utilisateur.",
+        idea: "Cela ne remplace pas l'identite legale, mais cela peut reduire la dependance a des comptes enfermes dans chaque plateforme."
+      },
+      nft: {
+        fear: "NFT images et absurdites visibles",
+        pivot: "NFT comme certificat numerique",
+        fact: "Un NFT est d'abord un certificat inscrit dans un registre: il peut representer une image, mais aussi un acces, une licence, un billet, une preuve ou un objet numerique.",
+        idea: "La caricature des images vendues trop cher cache parfois la fonction la plus simple: prouver qui possede quoi."
+      },
+      domain: {
+        fear: "complexite des adresses",
+        pivot: "noms lisibles pour wallets",
+        fact: "Les noms de domaine Web3 peuvent associer une adresse lisible a une adresse de wallet, comme les noms de domaine classiques ont rendu Internet utilisable.",
+        idea: "L'enjeu n'est pas seulement technique: c'est rendre la propriete numerique moins obscure pour les humains."
+      },
+      default: {
+        fear: "confusion entre speculation et usage",
+        pivot: "propriete numerique verifiable",
+        fact: "Bitcoin a montre qu'un actif numerique pouvait etre possede et transfere sans dependance directe a une base de donnees privee.",
+        idea: "Ce n'est pas une promesse que tout va remplacer tout. C'est une preuve d'existence: la propriete numerique directe est techniquement possible."
+      }
+    };
+
+    function normalize(text) {
+      return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function detect(text) {
+      const clean = normalize(text);
+      const has = words => words.some(word => clean.includes(word));
+      let key = "default";
+      if (has(["arnaque", "scam", "ponzi", "bullshit", "fraude", "casino"])) key = "scam";
+      if (has(["energie", "carbone", "climat", "pollution", "ecologie"])) key = "ecology";
+      if (has(["regulation", "loi", "interdire", "sec", "amf", "etat", "banque centrale"])) key = "regulation";
+      if (has(["donnees", "identite", "plateforme", "compte", "privacy", "personnelles"])) key = "identity";
+      if (has(["nft", "jpeg", "image", "collection"])) key = "nft";
+      if (has(["adresse", "wallet", "nom de domaine", "dns", "ens", "unstoppable"])) key = "domain";
+
+      const exclamations = (text.match(/!/g) || []).length;
+      const questions = (text.match(/\?/g) || []).length;
+      const lines = text.split(/\n+/).filter(Boolean).length;
+      let tone = "analytique";
+      if (exclamations > 2) tone = "indigne";
+      if (questions > 3) tone = "interrogatif";
+      if (lines > 8) tone = "fragmentaire LinkedIn";
+      if (has(["soyons serieux", "franchement", "absurde", "hallucinant"])) tone = "ironique";
+      return { key, tone, ...pivots[key] };
+    }
+
+    function topicTitle(detection) {
+      const titles = {
+        scam: "Le casino n'est pas le protocole",
+        ecology: "Critiquer l'energie, comprendre l'outil",
+        regulation: "Encadrer sans confisquer",
+        identity: "Le compte n'est pas l'identite",
+        nft: "Derriere le JPEG, le certificat",
+        domain: "Rendre les wallets humains",
+        default: "La propriete numerique, sans folklore"
+      };
+      return titles[detection.key] || titles.default;
+    }
+
+    function catastropheTitle(detection) {
+      const titles = {
+        scam: "Le Cryptoclysme du casino utile",
+        ecology: "Le Cryptoclysme du registre public",
+        regulation: "Le Cryptoclysme de la cle personnelle",
+        identity: "Le Cryptoclysme de l'identite portable",
+        nft: "Le Cryptoclysme du certificat numerique",
+        domain: "Le Cryptoclysme du nom qui vous appartient",
+        default: "Le Cryptoclysme de la propriete numerique"
+      };
+      return titles[detection.key] || titles.default;
+    }
+
+    function leadByTone(tone) {
+      if (tone === "indigne") return "Il y a une part du constat qui est difficile a balayer d'un revers de main.";
+      if (tone === "interrogatif") return "La question merite mieux qu'une reponse reflexe.";
+      if (tone === "ironique") return "On peut sourire du spectacle, parce qu'il donne parfois lui-meme les arguments contre lui.";
+      if (tone === "fragmentaire LinkedIn") return "Oui. Une bonne partie du bruit autour du sujet merite exactement cette lassitude.";
+      return "Le constat de depart est plus interessant qu'il n'y parait.";
+    }
+
+    function composeFull(text, detection, intensity, length) {
+      const title = intensity === "cryptoclysme" ? catastropheTitle(detection) : topicTitle(detection);
+      const sting = intensity === "sharp"
+        ? "Ce qui est amusant, c'est que cette critique vise souvent le symptome le plus visible, pas le mecanisme le plus durable."
+        : intensity === "calm"
+          ? "La nuance utile consiste peut-etre a separer les usages visibles des mecanismes sous-jacents."
+          : intensity === "cryptoclysme"
+            ? "Quelle idee dangereuse: regarder le mecanisme avant de juger le folklore."
+          : "Le piege, comme souvent, est de confondre la vitrine la plus bruyante avec le batiment entier.";
+      const extra = length === "long"
+        ? "\n\nOn peut meme aller plus loin: un wallet n'est pas seulement un outil pour envoyer un actif. C'est aussi une maniere de prouver que l'on controle une adresse. Un nom de domaine Web3 peut rendre cette adresse lisible. Un NFT utile peut servir de certificat, d'acces ou de preuve, pas seulement d'image collectionnable. Rien de tout cela n'oblige a croire aux promesses excessives du marche."
+        : "";
+      const shortener = length === "short" ? "\n\nLa vraie distinction est peut-etre la: refuser la speculation bruyante sans jeter la propriete numerique directe avec elle." : "";
+
+      if (intensity === "cryptoclysme") {
+        return `${title}
+
+Bienvenue dans le pire scenario imaginable.
+
+Imaginez que la critique ait raison sur une partie du spectacle: trop de promesses, trop de trading, trop de bruit, trop de gens qui vendent de la certitude avec un sourire beaucoup trop detendu.
+
+Horrible.
+
+Et maintenant, imaginons qu'une fois ce bruit retire, il reste quand meme une question technique assez simple: comment prouver qu'un actif, un acces, un nom ou une identite numerique appartient bien a quelqu'un sans dependre entierement d'une plateforme ?
+
+La, evidemment, on touche au drame.
+
+Parce que le raccourci le plus confortable consiste a tout mettre dans le meme sac: les arnaques, les influenceurs, les plateformes opaques, les NFT ridicules, les promesses de rendement et les registres publics qui permettent de verifier qui controle quoi.
+
+Pratique.
+Mais incomplet.
+
+${detection.fact}
+
+Une blockchain, dans sa definition la plus sobre, n'est pas une machine a rendre les gens riches. C'est un registre partage. Autrement dit: un systeme qui permet de verifier une information de propriete ou de transfert sans demander a une seule entreprise de tenir toute la verite dans sa base de donnees.
+
+Quelle idee.
+
+Un wallet peut servir a controler une adresse. Un nom de domaine Web3 peut rendre cette adresse lisible. Un NFT utile peut fonctionner comme un certificat numerique: acces, billet, licence, preuve, objet numerique. Pas forcement une image vendue avec trois lasers et beaucoup d'optimisme.
+
+On peut donc etre tres sceptique sur le trading.
+On peut meme trouver le folklore crypto parfaitement epuisant.
+Et on peut quand meme reconnaitre que la propriete numerique directe est un sujet distinct.
+
+${detection.idea}${extra}
+
+Le Web3 n'a pas besoin de remplacer brutalement le Web2 pour poser une bonne question. Il peut simplement completer certains usages: identite plus portable, actifs plus verifiables, services moins obliges de posseder toutes les donnees personnelles de l'utilisateur.
+
+Terrifiant, naturellement.
+
+On peut etre sceptique. Mais il est toujours plus interessant de comprendre une technologie avant de decider si elle merite ou non notre attention.${shortener}`;
+      }
+
+      return `${title}
+
+${leadByTone(detection.tone)}
+
+Le probleme, c'est qu'on met souvent dans le meme sac le trading, les promesses de rendement, les influenceurs, les plateformes opaques et les protocoles qui permettent simplement de verifier une propriete numerique.
+
+Or ce ne sont pas les memes objets.
+
+Je n'ai pas beaucoup de tendresse pour la speculation sur le travail d'autrui, ni pour le theatre permanent des gains faciles. Sur ce point, la critique est saine. Elle rappelle qu'une technologie peut etre interessante et son folklore parfaitement fatigant.
+
+${sting}
+
+${detection.fact}
+
+Ce que Bitcoin a rendu visible, au minimum, c'est qu'un actif numerique pouvait exister sans dependre uniquement d'une base de donnees privee tenue par une entreprise. Une blockchain, dans sa version la plus simple, est un registre public: elle permet de verifier qui controle quoi, sans devoir demander la permission a une plateforme centrale.
+
+Ce n'est pas une religion.
+Ce n'est pas un conseil financier.
+Ce n'est meme pas une promesse que tout doit basculer demain.
+
+C'est simplement une idee assez concrete: sur Internet, la propriete peut devenir plus portable, plus verifiable, parfois moins dependante d'un intermediaire unique.${extra}
+
+${detection.idea}
+
+Le Web3 le plus interessant n'est donc probablement pas celui qui crie le plus fort. C'est celui qui rend certaines choses ordinaires: posseder un actif numerique, prouver un droit, utiliser une identite portable, recevoir ou envoyer une valeur sans transformer chaque relation humaine en dependance a une plateforme.
+
+Il est possible que la meilleure critique des cryptos ne soit pas de les reduire a un casino.
+Mais de demander quels usages survivent quand le casino ferme.${shortener}`;
+    }
+
+    function composeShort(detection, intensity) {
+      if (intensity === "cryptoclysme") {
+        return `${catastropheTitle(detection)}
+
+Bienvenue dans le pire scenario imaginable: une critique des cryptos peut etre juste sur le bruit, et incomplete sur l'infrastructure.
+
+Oui, le trading permanent et les promesses faciles ont rendu le sujet presque caricatural.
+
+Horrible.
+
+Mais une blockchain reste d'abord un registre public. Un wallet peut prouver le controle d'une adresse. Un NFT utile peut etre un certificat numerique. Un nom de domaine Web3 peut rendre une adresse lisible.
+
+Bref: on peut detester le casino sans ignorer la question qu'il cache.
+
+Qui possede quoi sur Internet, et qui peut le retirer ?
+
+On peut etre sceptique. Mais il est toujours plus interessant de comprendre une technologie avant de decider si elle merite ou non notre attention.`;
+      }
+
+      const closing = intensity === "sharp"
+        ? "Le casino fait du bruit. Le registre, lui, continue de poser une question plus derangeante: qui possede quoi sur Internet ?"
+        : "La nuance est peut-etre la: critiquer le bruit sans ignorer ce que l'infrastructure permet.";
+      return `${topicTitle(detection)}
+
+Je partage une partie du constat: le spectacle autour des cryptos a souvent rendu le sujet presque impossible a prendre au serieux.
+
+Mais ce spectacle ne resume pas tout.
+
+Une blockchain reste d'abord un registre public qui permet de verifier une propriete numerique. Un wallet peut devenir une preuve de controle. Un NFT utile peut etre un certificat, pas seulement une image. Un nom de domaine Web3 peut rendre une adresse de wallet lisible.
+
+Rien de cela ne promet de remplacer le Web2.
+Mais cela montre qu'une partie de notre identite et de nos actifs numeriques peut devenir plus portable.
+
+${closing}`;
+    }
+
+    function composeComments(detection, intensity) {
+      if (intensity === "cryptoclysme") {
+        return [
+          `Horrible perspective: separer le casino de l'infrastructure avant de juger l'ensemble.`,
+          `On peut etre sceptique. Mais comprendre ce qu'est un registre public avant de le critiquer reste une option assez elegante.`,
+          `Le plus inquietant, finalement, c'est peut-etre l'idee qu'un utilisateur puisse prouver quelque chose sans demander la permission a une plateforme.`,
+          `Les NFT comme images absurdes, oui. Les NFT comme certificats numeriques, c'est deja une discussion un peu plus interessante.`,
+          `Quelle idee dangereuse: se demander qui possede quoi sur Internet, et qui peut le retirer.`
+        ].map((line, index) => `${index + 1}. ${line}`).join("\n\n");
+      }
+
+      return [
+        `La confusion vient souvent du fait qu'on juge l'infrastructure a partir de ses usages les plus bruyants. Ce n'est pas absurde, mais ce n'est pas complet.`,
+        `Le point interessant n'est peut-etre pas "crypto oui ou non", mais: qui controle la preuve de propriete dans un monde numerique ?`,
+        `On peut detester le trading et trouver utile l'idee d'un registre public verifiable. Les deux positions ne sont pas incompatibles.`,
+        `Les NFT ont surtout ete visibles comme images speculatives. Leur fonction plus simple reste celle d'un certificat numerique.`,
+        `${detection.idea}`
+      ].map((line, index) => `${index + 1}. ${line}`).join("\n\n");
+    }
+
+    function buildPrompt(text) {
+      return `${masterPrompt}
+
+Article LinkedIn a traiter:
+"""
+${text.trim()}
+"""`;
+    }
+
+    function generate() {
+      const text = sourceText.value.trim();
+      if (!text) {
+        sourceText.focus();
+        return;
+      }
+      const detection = detect(text);
+      detectedTone.textContent = detection.tone;
+      detectedFear.textContent = detection.fear;
+      detectedPivot.textContent = detection.pivot;
+      fullOutput.textContent = composeFull(text, detection, toneInput.value, lengthInput.value);
+      shortOutput.textContent = composeShort(detection, toneInput.value);
+      commentsOutput.textContent = composeComments(detection, toneInput.value);
+      promptOutput.textContent = buildPrompt(text);
+      emptyState.hidden = true;
+      results.hidden = false;
+      localStorage.setItem("cryptoclisme:last", text);
+    }
+
+    async function copyFromId(id) {
+      const text = document.querySelector(`#${id}`).textContent;
+      await navigator.clipboard.writeText(text);
+    }
+
+    document.querySelector("#generate").addEventListener("click", generate);
+    document.querySelector("#clear").addEventListener("click", () => {
+      sourceText.value = "";
+      emptyState.hidden = false;
+      results.hidden = true;
+      localStorage.removeItem("cryptoclisme:last");
+      sourceText.focus();
+    });
+
+    document.querySelector("#copyPromptTop").addEventListener("click", async () => {
+      await navigator.clipboard.writeText(masterPrompt);
+    });
+
+    document.querySelectorAll("[data-copy]").forEach(button => {
+      button.addEventListener("click", () => copyFromId(button.dataset.copy));
+    });
+
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(item => {
+          item.setAttribute("aria-selected", "false");
+          item.classList.remove("is-active");
+        });
+        document.querySelectorAll(".result").forEach(item => item.classList.remove("active"));
+        tab.setAttribute("aria-selected", "true");
+        tab.classList.add("is-active");
+        document.querySelector(`#tab-${tab.dataset.tab}`).classList.add("active");
+      });
+    });
+
+    const last = localStorage.getItem("cryptoclisme:last");
+    if (last) {
+      sourceText.value = last;
+    }
+  </script>
+  <script src="widget-nav.js"></script>
+  <script src="../../assets/ibiza-radio-widget.js" defer></script>
+</body>
+</html>

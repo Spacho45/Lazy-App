@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bibliothèque d'articles</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../lazyapp-widget-shell.css">
+</head>
+<body>
+  <div class="lazyapp-widget-back"><span>Lazy App · Widget dedie</span><a href="../../../index.html#realisations">Retour au site</a></div>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Filtres">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <div>
+          <h1>Bibliothèque</h1>
+          <p id="library-count">0 articles</p>
+        </div>
+      </div>
+
+      <nav class="filter-nav" id="topic-filters" aria-label="Thèmes"></nav>
+
+      <section class="side-section">
+        <h2>Formats</h2>
+        <div class="format-list" id="format-filters"></div>
+      </section>
+
+      <section class="side-section">
+        <h2>Accès rapide</h2>
+        <button class="side-action is-active" type="button" data-quick="all">Tous les textes</button>
+        <button class="side-action" type="button" data-quick="atelier">Atelier d'analyse</button>
+        <button class="side-action" type="button" data-quick="favorites">Favoris</button>
+        <button class="side-action" type="button" data-quick="sources">Avec sources</button>
+      </section>
+    </aside>
+
+    <main class="content">
+      <header class="toolbar">
+        <div class="search-wrap">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="m21 21-4.2-4.2m1.2-5.3a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"/>
+          </svg>
+          <input id="search" type="search" placeholder="Rechercher un article, thème, mot-clé..." autocomplete="off">
+        </div>
+        <div class="toolbar-actions">
+          <select id="sort">
+            <option value="recent">Plus récents</option>
+            <option value="title">Titre A-Z</option>
+            <option value="theme">Thème</option>
+          </select>
+          <button class="icon-button" id="clear" type="button" title="Réinitialiser les filtres" aria-label="Réinitialiser">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="analysis-widget" id="analysis-widget" aria-label="Atelier d'analyse">
+        <div class="widget-head">
+          <div>
+            <h2>Atelier d'analyse</h2>
+            <p>Colle un texte, indique l'idée à défendre, puis choisis la logique du plan.</p>
+          </div>
+          <button class="link-button" id="toggle-widget" type="button">Masquer</button>
+        </div>
+
+        <div class="widget-grid">
+          <label class="field">
+            <span>Titre de la fiche</span>
+            <input id="analysis-title" type="text" placeholder="Ex. Mémoire certifiée">
+          </label>
+
+          <label class="field">
+            <span>Idée générale à mettre en avant</span>
+            <input id="analysis-idea" type="text" placeholder="Ex. La ressource stratégique devient la mémoire certifiée">
+          </label>
+
+          <label class="field">
+            <span>Structure argumentative</span>
+            <select id="analysis-structure">
+              <option value="dialectique">Thèse / antithèse / synthèse</option>
+              <option value="operationnel">Problème / solution / mise en œuvre</option>
+              <option value="confrontation">Deux points de vue / solution logique détachée</option>
+            </select>
+          </label>
+
+          <label class="field field-wide">
+            <span>Textes à analyser</span>
+            <textarea id="analysis-text" rows="10" placeholder="Colle ici l'article, tes notes, ou plusieurs extraits à confronter..."></textarea>
+          </label>
+
+          <label class="field field-wide">
+            <span>Sources utiles, liens ou références</span>
+            <textarea id="analysis-sources" rows="3" placeholder="Ajoute ici les liens, articles, PDF ou références à conserver avec l'analyse..."></textarea>
+          </label>
+        </div>
+
+        <div class="widget-actions">
+          <button class="primary-button" id="generate-analysis" type="button">Générer la trame</button>
+          <button class="link-button" id="save-analysis" type="button">Ajouter à la bibliothèque</button>
+          <button class="link-button" id="copy-analysis" type="button">Copier</button>
+          <button class="link-button" id="download-analysis" type="button">Exporter .md</button>
+        </div>
+
+        <pre class="analysis-output" id="analysis-output" aria-live="polite"></pre>
+      </section>
+
+      <section class="library-head">
+        <div>
+          <h2>Articles enregistrés</h2>
+          <p id="result-count">0 résultat</p>
+        </div>
+        <div class="active-tags" id="active-tags"></div>
+      </section>
+
+      <section class="grid" id="article-grid" aria-live="polite"></section>
+    </main>
+
+    <aside class="detail-panel" id="detail-panel" aria-label="Détail de l'article"></aside>
+  </div>
+
+  <div class="modal-backdrop" id="version-modal" hidden>
+    <section class="version-modal" role="dialog" aria-modal="true" aria-labelledby="version-modal-title">
+      <div class="modal-head">
+        <div>
+          <p class="modal-kicker" id="version-modal-kicker">Version</p>
+          <h2 id="version-modal-title">Article</h2>
+        </div>
+        <button class="icon-button" id="close-version-modal" type="button" aria-label="Fermer">×</button>
+      </div>
+      <div id="version-modal-body"></div>
+    </section>
+  </div>
+
+  <script src="../widget-nav.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../assets/ibiza-radio-widget.js" defer></script>
+</body>
+</html>

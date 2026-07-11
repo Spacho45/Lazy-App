@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global ccTLD Domain Registry Globe</title>
+<meta name="description" content="Interactive 3D globe showing country outlines and ccTLD domain registration counts as rising columns from capital cities.">
+<meta name="keywords" content="ccTLD, domain names, globe, 3D, interactive, country code top level domain">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Global ccTLD Domain Registry Globe">
+<meta property="og:description" content="Interactive 3D globe showing ccTLD domain registration counts as rising columns from capital cities.">
+<meta property="og:image" content="https://placehold.co/1200x630">
+<meta property="og:url" content="">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Global ccTLD Domain Registry Globe">
+<meta name="twitter:description" content="Interactive 3D globe showing ccTLD domain registration counts as rising columns from capital cities.">
+<meta name="twitter:image" content="https://placehold.co/1200x630">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%2300d4ff' stroke-width='6'/%3E%3Cellipse cx='50' cy='50' rx='20' ry='45' fill='none' stroke='%2300d4ff' stroke-width='4'/%3E%3Cline x1='5' y1='50' x2='95' y2='50' stroke='%2300d4ff' stroke-width='4'/%3E%3C/svg%3E">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#000510;
+  color:#e0f0ff;
+  font-family:'Segoe UI',system-ui,sans-serif;
+  overflow:hidden;
+  height:100vh; width:100vw;
+}
+canvas {
+  display:block;
+  position:fixed;
+  inset:0;
+  cursor:grab;
+}
+canvas:active { cursor:grabbing; }
+
+#header {
+  position:fixed; top:0; left:0; right:0;
+  padding:16px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:linear-gradient(to bottom,rgba(0,5,16,0.95),transparent);
+  pointer-events:none; z-index:10;
+}
+#header h1 {
+  font-size:clamp(1rem,2.5vw,1.4rem);
+  font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:#00d4ff; text-shadow:0 0 20px rgba(0,212,255,.6);
+}
+#header p { font-size:clamp(.6rem,1.1vw,.75rem); color:#7ab8d4; letter-spacing:.05em; }
+
+#legend {
+  position:fixed; bottom:24px; left:24px;
+  background:rgba(0,10,30,.88);
+  border:1px solid rgba(0,212,255,.25);
+  border-radius:12px; padding:14px 18px;
+  pointer-events:none; z-index:10;
+  backdrop-filter:blur(8px);
+}
+#legend h3 { font-size:.68rem; text-transform:uppercase; letter-spacing:.1em; color:#00d4ff; margin-bottom:10px; }
+.lr { display:flex; align-items:center; gap:8px; margin-bottom:5px; font-size:.7rem; color:#a0c8e0; }
+.lb { width:28px; height:6px; border-radius:3px; }
+
+#tooltip {
+  position:fixed;
+  background:rgba(0,10,30,.96);
+  border:1px solid rgba(0,212,255,.4);
+  border-radius:10px; padding:12px 16px;
+  pointer-events:none; z-index:20; display:none;
+  backdrop-filter:blur(10px); min-width:180px;
+  box-shadow:0 0 20px rgba(0,212,255,.2);
+}
+#tooltip .tc { font-size:.8rem; font-weight:700; color:#ffcc44; margin-bottom:2px; }
+#tooltip .tn { font-size:1rem; font-weight:700; color:#00d4ff; margin-bottom:3px; }
+#tooltip .tk { font-size:.72rem; color:#7ab8d4; margin-bottom:6px; }
+#tooltip .td { font-size:.82rem; color:#e0f0ff; }
+#tooltip .td span { color:#00ffaa; font-weight:700; }
+
+#hint {
+  position:fixed; bottom:24px; right:24px;
+  font-size:.65rem; color:#3a6a8a; text-align:right;
+  pointer-events:none; z-index:10; line-height:1.8;
+}
+#library-link {
+  position:fixed; top:82px; left:24px;
+  color:#00ffaa; text-decoration:none; font-size:.72rem; font-weight:700;
+  letter-spacing:.04em; z-index:12;
+  background:rgba(0,10,30,.72);
+  border:1px solid rgba(0,212,255,.24);
+  border-radius:8px; padding:8px 10px;
+  backdrop-filter:blur(8px);
+}
+#library-link:hover { border-color:rgba(0,255,170,.5); }
+#loading {
+  position:fixed; inset:0; background:#000510;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:100; gap:18px;
+}
+#loading h2 { color:#00d4ff; font-size:1.1rem; letter-spacing:.1em; text-transform:uppercase; }
+.spin {
+  width:56px; height:56px;
+  border:3px solid rgba(0,212,255,.15);
+  border-top-color:#00d4ff;
+  border-radius:50%;
+  animation:sp 1s linear infinite;
+}
+@keyframes sp { to { transform:rotate(360deg); } }
+</style>
+  <link rel="stylesheet" href="lazyapp-widget-shell.css">
+</head>
+<body>
+  <div class="lazyapp-widget-back"><span>Lazy App · Widget dedie</span><a href="../../index.html#realisations">Retour au site</a></div>
+
+<div id="loading"><div class="spin"></div><h2>Loading Globe…</h2></div>
+
+<canvas id="globe"></canvas>
+<a id="library-link" href="index.html">Bibliotheque</a>
+
+<div id="header">
+  <div>
+    <h1>🌐 ccTLD Domain Globe</h1>
+    <p>Column height = registered domains in country-code TLD</p>
+  </div>
+  <div style="text-align:right">
+    <p style="color:#00ffaa;font-size:clamp(.6rem,1.1vw,.75rem);">~139M total ccTLD registrations</p>
+    <p style="font-size:clamp(.55rem,1vw,.7rem);color:#7ab8d4;">Source: Domain Name Industry Brief 2024</p>
+  </div>
+</div>
+
+<div id="legend">
+  <h3>Registered Domains</h3>
+  <div class="lr"><div class="lb" style="background:#ff4444"></div>&gt; 10M</div>
+  <div class="lr"><div class="lb" style="background:#ff8800"></div>5M – 10M</div>
+  <div class="lr"><div class="lb" style="background:#ffcc00"></div>1M – 5M</div>
+  <div class="lr"><div class="lb" style="background:#44ff88"></div>100K – 1M</div>
+  <div class="lr"><div class="lb" style="background:#00aaff"></div>&lt; 100K</div>
+</div>
+
+<div id="tooltip">
+  <div class="tc" id="tt-cctld"></div>
+  <div class="tn" id="tt-country"></div>
+  <div class="tk" id="tt-capital"></div>
+  <div class="td">Registered: <span id="tt-domains"></span></div>
+</div>
+
+<div id="hint">Drag to rotate · Scroll to zoom<br>Hover columns for details</div>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"ccTLD Domain Registry Globe","description":"Interactive 3D globe visualizing country-code top-level domain registrations as columns rising from capital cities.","applicationCategory":"DataVisualization"}
+</script>
+
+<script>
+// ── ccTLD DATA [country, cctld, capital, lat, lon, registrations] ──────────
+const DATA = [
+  ["Germany",".de","Berlin",52.52,13.405,17700000],
+  ["China",".cn","Beijing",39.9042,116.4074,19700000],
+  ["United Kingdom",".uk","London",51.5074,-0.1278,10400000],
+  ["Russia",".ru","Moscow",55.7558,37.6173,6600000],
+  ["Netherlands",".nl","Amsterdam",52.3676,4.9041,6200000],
+  ["Brazil",".br","Brasília",-15.7801,-47.9292,5400000],
+  ["France",".fr","Paris",48.8566,2.3522,5000000],
+  ["Australia",".au","Canberra",-35.2809,149.13,4300000],
+  ["India",".in","New Delhi",28.6139,77.209,4000000],
+  ["European Union",".eu","Brussels",50.8503,4.3517,3500000],
+  ["Poland",".pl","Warsaw",52.2297,21.0122,2900000],
+  ["Canada",".ca","Ottawa",45.4215,-75.6972,2800000],
+  ["Italy",".it","Rome",41.9028,12.4964,2700000],
+  ["Switzerland",".ch","Bern",46.948,7.4474,2400000],
+  ["Spain",".es","Madrid",40.4168,-3.7038,2200000],
+  ["Turkey",".tr","Ankara",39.9334,32.8597,2100000],
+  ["Belgium",".be","Brussels",50.8503,4.3517,1500000],
+  ["Taiwan",".tw","Taipei",25.033,121.5654,1500000],
+  ["Austria",".at","Vienna",48.2082,16.3738,1300000],
+  ["Czech Republic",".cz","Prague",50.0755,14.4378,1400000],
+  ["Sweden",".se","Stockholm",59.3293,18.0686,1400000],
+  ["Japan",".jp","Tokyo",35.6762,139.6503,1400000],
+  ["South Korea",".kr","Seoul",37.5665,126.978,1200000],
+  ["Denmark",".dk","Copenhagen",55.6761,12.5683,1200000],
+  ["South Africa",".za","Pretoria",-25.7479,28.2293,1100000],
+  ["Portugal",".pt","Lisbon",38.7223,-9.1393,1000000],
+  ["Romania",".ro","Bucharest",44.4268,26.1025,900000],
+  ["Norway",".no","Oslo",59.9139,10.7522,900000],
+  ["Finland",".fi","Helsinki",60.1699,24.9384,800000],
+  ["Mexico",".mx","Mexico City",19.4326,-99.1332,800000],
+  ["Iran",".ir","Tehran",35.6892,51.389,700000],
+  ["Ukraine",".ua","Kyiv",50.4501,30.5234,700000],
+  ["New Zealand",".nz","Wellington",-41.2865,174.7762,700000],
+  ["Colombia",".co","Bogotá",4.711,-74.0721,600000],
+  ["Israel",".il","Jerusalem",31.7683,35.2137,600000],
+  ["Chile",".cl","Santiago",-33.4489,-70.6693,500000],
+  ["Vietnam",".vn","Hanoi",21.0285,105.8542,500000],
+  ["Bulgaria",".bg","Sofia",42.6977,23.3219,500000],
+  ["Argentina",".ar","Buenos Aires",-34.6037,-58.3816,500000],
+  ["Hungary",".hu","Budapest",47.4979,19.0402,700000],
+  ["Greece",".gr","Athens",37.9838,23.7275,600000],
+  ["Thailand",".th","Bangkok",13.7563,100.5018,400000],
+  ["Indonesia",".id","Jakarta",-6.2088,106.8456,300000],
+  ["Serbia",".rs","Belgrade",44.7866,20.4489,400000],
+  ["Belarus",".by","Minsk",53.9045,27.5615,400000],
+  ["Slovakia",".sk","Bratislava",48.1486,17.1077,400000],
+  ["Croatia",".hr","Zagreb",45.815,15.9819,300000],
+  ["Malaysia",".my","Kuala Lumpur",3.139,101.6869,300000],
+  ["Hong Kong",".hk","Hong Kong",22.3193,114.1694,300000],
+  ["Ireland",".ie","Dublin",53.3498,-6.2603,300000],
+  ["Lithuania",".lt","Vilnius",54.6872,25.2797,300000],
+  ["Morocco",".ma","Rabat",34.0209,-6.8416,200000],
+  ["Saudi Arabia",".sa","Riyadh",24.7136,46.6753,200000],
+  ["UAE",".ae","Abu Dhabi",24.4539,54.3773,200000],
+  ["Kazakhstan",".kz","Nur-Sultan",51.1801,71.446,200000],
+  ["Latvia",".lv","Riga",56.9496,24.1052,200000],
+  ["Estonia",".ee","Tallinn",59.437,24.7536,200000],
+  ["Slovenia",".si","Ljubljana",46.0569,14.5058,200000],
+  ["Luxembourg",".lu","Luxembourg City",49.6117,6.1319,200000],
+  ["Uruguay",".uy","Montevideo",-34.9011,-56.1645,200000],
+  ["Egypt",".eg","Cairo",30.0444,31.2357,200000],
+  ["Singapore",".sg","Singapore",1.3521,103.8198,200000],
+  ["Pakistan",".pk","Islamabad",33.6844,73.0479,200000],
+  ["Dominican Republic",".do","Santo Domingo",18.4861,-69.9312,100000],
+  ["Costa Rica",".cr","San José",9.9281,-84.0907,100000],
+  ["Tunisia",".tn","Tunis",36.8065,10.1815,100000],
+  ["Algeria",".dz","Algiers",36.7372,3.0865,100000],
+  ["Nigeria",".ng","Abuja",9.0765,7.3986,100000],
+  ["Kenya",".ke","Nairobi",-1.2921,36.8219,100000],
+  ["Philippines",".ph","Manila",14.5995,120.9842,200000],
+  ["Libya",".ly","Tripoli",32.8872,13.1913,300000],
+  ["Montenegro",".me","Podgorica",42.4304,19.2594,500000],
+  ["Iceland",".is","Reykjavik",64.1355,-21.8954,100000],
+  ["Armenia",".am","Yerevan",40.1872,44.5152,100000],
+  ["Georgia",".ge","Tbilisi",41.6938,44.8015,100000],
+  ["Azerbaijan",".az","Baku",40.4093,49.8671,100000],
+  ["Liechtenstein",".li","Vaduz",47.141,9.5209,100000],
+  ["Bangladesh",".bd","Dhaka",23.8103,90.4125,100000],
+  ["Cuba",".cu","Havana",23.1136,-82.3666,50000],
+  ["Guatemala",".gt","Guatemala City",14.6349,-90.5069,50000],
+  ["Panama",".pa","Panama City",8.9936,-79.5197,50000],
+  ["Jordan",".jo","Amman",31.9454,35.9284,80000],
+  ["Lebanon",".lb","Beirut",33.8938,35.5018,80000],
+  ["Sri Lanka",".lk","Colombo",6.9271,79.8612,80000],
+  ["Albania",".al","Tirana",41.3275,19.8187,80000],
+  ["Bosnia",".ba","Sarajevo",43.8563,18.4131,80000],
+  ["Cyprus",".cy","Nicosia",35.1856,33.3823,80000],
+  ["Malta",".mt","Valletta",35.8997,14.5147,60000],
+  ["North Macedonia",".mk","Skopje",41.9981,21.4254,60000],
+  ["Moldova",".md","Chișinău",47.0105,28.8638,100000],
+  ["Kuwait",".kw","Kuwait City",29.3759,47.9774,50000],
+  ["Qatar",".qa","Doha",25.2854,51.531,50000],
+  ["Oman",".om","Muscat",23.588,58.3829,50000],
+  ["Uzbekistan",".uz","Tashkent",41.2995,69.2401,100000],
+  ["Nepal",".np","Kathmandu",27.7172,85.324,80000],
+  ["Iraq",".iq","Baghdad",33.3152,44.3661,80000],
+  ["Myanmar",".mm","Naypyidaw",19.7633,96.0785,50000],
+  ["Tanzania",".tz","Dodoma",-6.163,35.7516,50000],
+  ["Ghana",".gh","Accra",5.6037,-0.187,50000],
+  ["Senegal",".sn","Dakar",14.7167,-17.4677,30000],
+  ["Cameroon",".cm","Yaoundé",3.848,11.5021,30000],
+  ["Ethiopia",".et","Addis Ababa",9.032,38.7469,30000],
+  ["New Caledonia",".nc","Nouméa",-22.2758,166.458,50000],
+  ["Vatican",".va","Vatican City",41.9029,12.4534,5000],
+  ["Monaco",".mc","Monaco",43.7384,7.4246,10000],
+  ["San Marino",".sm","San Marino",43.9424,12.4578,10000],
+  ["Andorra",".ad","Andorra la Vella",42.5063,1.5218,20000],
+  ["Laos",".la","Vientiane",17.9757,102.6331,200000],
+  ["Peru",".pe","Lima",-12.0464,-77.0428,200000],
+  ["Venezuela",".ve","Caracas",10.4806,-66.9036,100000],
+  ["Ecuador",".ec","Quito",-0.1807,-78.4678,100000],
+  ["Bolivia",".bo","Sucre",-19.0196,-65.2619,50000],
+  ["Paraguay",".py","Asunción",-25.2867,-57.647,50000],
+  ["Zimbabwe",".zw","Harare",-17.8252,31.0335,30000],
+  ["Zambia",".zm","Lusaka",-15.4167,28.2833,20000],
+  ["Mozambique",".mz","Maputo",-25.9692,32.5732,20000],
+  ["Madagascar",".mg","Antananarivo",-18.9137,47.5361,20000],
+  ["Sudan",".sd","Khartoum",15.5007,32.5599,20000],
+  ["Uganda",".ug","Kampala",0.3476,32.5825,30000],
+  ["Ivory Coast",".ci","Yamoussoukro",6.8276,-5.2893,30000],
+  ["Bahrain",".bh","Manama",26.2235,50.5876,30000],
+  ["Yemen",".ye","Sana'a",15.3694,44.191,20000],
+  ["Syria",".sy","Damascus",33.5138,36.2765,30000],
+  ["Afghanistan",".af","Kabul",34.5553,69.2075,30000],
+  ["Cambodia",".kh","Phnom Penh",11.5564,104.9282,50000],
+  ["Fiji",".fj","Suva",-18.1416,178.4419,20000],
+  ["Papua New Guinea",".pg","Port Moresby",-9.4438,147.1803,20000],
+  ["Honduras",".hn","Tegucigalpa",14.0723,-87.202,30000],
+  ["El Salvador",".sv","San Salvador",13.6929,-89.2182,30000],
+  ["Nicaragua",".ni","Managua",12.1149,-86.2362,20000],
+];
+
+// ── CANVAS SETUP ────────────────────────────────────────────────────────────
+const canvas = document.getElementById('globe');
+const ctx = canvas.getContext('2d');
+let W, H, R, CX, CY;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  R = Math.min(W, H) * 0.38;
+  CX = W / 2; CY = H / 2;
+}
+resize();
+window.addEventListener('resize', () => { resize(); draw(); });
+
+// ── ROTATION STATE ──────────────────────────────────────────────────────────
+let rotY = -0.3; // longitude center (radians)
+let rotX = 0.2;   // latitude tilt (radians)
+let velY = -0.003, velX = 0;  // negative so auto-rotation goes west→east (correct direction)
+let isDragging = false, lastX = 0, lastY = 0;
+let autoRotate = true;
+let zoom = 1.0;
+let idleTimer;
+
+// ── ORTHOGRAPHIC PROJECTION ─────────────────────────────────────────────────
+// Returns {x, y, visible} for a lat/lon point
+function project(lat, lon) {
+  const phi =  lat * Math.PI / 180;
+  // Negate longitude so that east is to the right (standard geographic convention).
+  // Without negation the sphere's x-axis points west, producing a mirror image.
+  const lam = -lon * Math.PI / 180;
+  // 3D cartesian on unit sphere
+  // x = cos(φ)cos(λ),  y = sin(φ),  z = cos(φ)sin(λ)
+  const x3 = Math.cos(phi) * Math.cos(lam);
+  const y3 = Math.sin(phi);
+  const z3 = Math.cos(phi) * Math.sin(lam);
+  // Rotate by rotY (around Y axis) then rotX (around X axis)
+  const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+  const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+  // Rotate around Y
+  const rx1 = x3 * cosY - z3 * sinY;
+  const ry1 = y3;
+  const rz1 = x3 * sinY + z3 * cosY;
+  // Rotate around X
+  const rx2 = rx1;
+  const ry2 = ry1 * cosX - rz1 * sinX;
+  const rz2 = ry1 * sinX + rz1 * cosX;
+  const r = R * zoom;
+  return {
+    x: CX + rx2 * r,
+    y: CY - ry2 * r,
+    z: rz2,          // depth: positive = front
+    visible: rz2 > 0
+  };
+}
+
+// ── GEOJSON DATA ─────────────────────────────────────────────────────────────
+let geoFeatures = [];
+
+// ── DRAW FUNCTIONS ───────────────────────────────────────────────────────────
+function domainColor(n) {
+  if (n >= 10000000) return '#ff4444';
+  if (n >= 5000000)  return '#ff8800';
+  if (n >= 1000000)  return '#ffcc00';
+  if (n >= 100000)   return '#44ff88';
+  return '#00aaff';
+}
+
+const MAX_DOMAINS = 19700000;
+const MIN_COL_H = 0.04;  // fraction of R
+const MAX_COL_H = 0.55;
+
+function colHeight(n) {
+  return MIN_COL_H + (Math.log10(Math.max(n,1)) / Math.log10(MAX_DOMAINS)) * (MAX_COL_H - MIN_COL_H);
+}
+
+// Draw a single GeoJSON polygon ring as a path on the globe
+function drawRing(ring) {
+  let started = false;
+  let prevVisible = false;
+  ctx.beginPath();
+  for (let i = 0; i < ring.length; i++) {
+    const [lon, lat] = ring[i];
+    const p = project(lat, lon);
+    if (p.visible) {
+      if (!started || !prevVisible) {
+        ctx.moveTo(p.x, p.y);
+      } else {
+        ctx.lineTo(p.x, p.y);
+      }
+      started = true;
+    }
+    prevVisible = p.visible;
+  }
+}
+
+function drawGraticule() {
+  ctx.strokeStyle = 'rgba(0,180,255,0.08)';
+  ctx.lineWidth = 0.5;
+  // Latitude lines
+  for (let lat = -80; lat <= 80; lat += 20) {
+    ctx.beginPath();
+    let first = true;
+    for (let lon = -180; lon <= 180; lon += 2) {
+      const p = project(lat, lon);
+      if (p.visible) {
+        first ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+        first = false;
+      } else { first = true; }
+    }
+    ctx.stroke();
+  }
+  // Longitude lines
+  for (let lon = -180; lon < 180; lon += 20) {
+    ctx.beginPath();
+    let first = true;
+    for (let lat = -90; lat <= 90; lat += 2) {
+      const p = project(lat, lon);
+      if (p.visible) {
+        first ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+        first = false;
+      } else { first = true; }
+    }
+    ctx.stroke();
+  }
+}
+
+function drawCountries() {
+  ctx.strokeStyle = 'rgba(0,180,255,0.45)';
+  ctx.lineWidth = 0.8;
+  for (const feature of geoFeatures) {
+    const geom = feature.geometry;
+    if (!geom) continue;
+    const polys = geom.type === 'Polygon' ? [geom.coordinates]
+                : geom.type === 'MultiPolygon' ? geom.coordinates : [];
+    for (const poly of polys) {
+      for (const ring of poly) {
+        drawRing(ring);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+// Column data sorted by depth for painter's algorithm
+let columnCache = [];
+
+function buildColumnCache() {
+  columnCache = DATA.map(d => {
+    const [country, cctld, capital, lat, lon, domains] = d;
+    const h = colHeight(domains);
+    const color = domainColor(domains);
+    return { country, cctld, capital, lat, lon, domains, h, color };
+  });
+}
+
+function drawColumns() {
+  // Sort back-to-front by z depth of base point
+  const sorted = columnCache.map(c => {
+    const base = project(c.lat, c.lon);
+    return { ...c, base };
+  }).sort((a, b) => a.base.z - b.base.z);
+
+  const r = R * zoom;
+
+  for (const c of sorted) {
+    const base = c.base;
+    if (!base.visible) continue;
+
+    // Project tip: move along surface normal by h * R
+    const phi = c.lat * Math.PI / 180;
+    const lam = c.lon * Math.PI / 180;
+    const tipLat = c.lat; // approximate: project a point slightly above surface
+    // We compute tip by scaling the base vector outward
+    // base is at distance R from center; tip at R*(1+h)
+    const scale = (1 + c.h);
+    const tipX = CX + (base.x - CX) * scale;
+    const tipY = CY + (base.y - CY) * scale;
+
+    const colW = Math.max(2, r * 0.012);
+    const alpha = Math.min(1, 0.5 + base.z * 0.6);
+
+    // Draw column as thick line
+    ctx.beginPath();
+    ctx.moveTo(base.x, base.y);
+    ctx.lineTo(tipX, tipY);
+    ctx.strokeStyle = c.color;
+    ctx.lineWidth = colW;
+    ctx.globalAlpha = alpha;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Glow cap at tip
+    const capR = colW * 0.9;
+    const grad = ctx.createRadialGradient(tipX, tipY, 0, tipX, tipY, capR * 2.5);
+    grad.addColorStop(0, c.color);
+    grad.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(tipX, tipY, capR * 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.globalAlpha = alpha * 0.7;
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
+  }
+}
+
+function drawGlobe() {
+  const r = R * zoom;
+  // Atmosphere glow
+  const atm = ctx.createRadialGradient(CX, CY, r * 0.92, CX, CY, r * 1.12);
+  atm.addColorStop(0, 'rgba(0,80,200,0.18)');
+  atm.addColorStop(1, 'transparent');
+  ctx.beginPath();
+  ctx.arc(CX, CY, r * 1.12, 0, Math.PI * 2);
+  ctx.fillStyle = atm;
+  ctx.fill();
+
+  // Ocean fill
+  const ocean = ctx.createRadialGradient(CX - r*0.2, CY - r*0.2, r*0.1, CX, CY, r);
+  ocean.addColorStop(0, '#003366');
+  ocean.addColorStop(1, '#000d1a');
+  ctx.beginPath();
+  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.fillStyle = ocean;
+  ctx.fill();
+
+  // Subtle specular highlight
+  const spec = ctx.createRadialGradient(CX - r*0.3, CY - r*0.35, 0, CX - r*0.1, CY - r*0.1, r*0.7);
+  spec.addColorStop(0, 'rgba(100,180,255,0.12)');
+  spec.addColorStop(1, 'transparent');
+  ctx.beginPath();
+  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.fillStyle = spec;
+  ctx.fill();
+
+  // Clip future drawing to globe circle
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.clip();
+}
+
+function drawStars() {
+  // Static star field (drawn behind globe)
+  ctx.fillStyle = '#000510';
+  ctx.fillRect(0, 0, W, H);
+  // Use seeded positions
+  const stars = drawStars._stars || (drawStars._stars = Array.from({length:1800}, () => ({
+    x: Math.random(), y: Math.random(),
+    s: Math.random() * 1.5 + 0.3,
+    a: Math.random() * 0.7 + 0.3
+  })));
+  for (const s of stars) {
+    ctx.beginPath();
+    ctx.arc(s.x * W, s.y * H, s.s, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${s.a})`;
+    ctx.fill();
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  drawStars();
+  drawGlobe();       // sets clip
+  drawGraticule();
+  drawCountries();
+  ctx.restore();     // remove clip
+  drawColumns();     // columns drawn on top, outside clip so they can protrude
+
+  // Globe border ring
+  const r = R * zoom;
+  ctx.beginPath();
+  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(0,180,255,0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+}
+
+// ── ANIMATION LOOP ───────────────────────────────────────────────────────────
+let raf;
+function animate() {
+  if (autoRotate) {
+    rotY += velY;
+  } else if (!isDragging) {
+    velY *= 0.92; velX *= 0.92;
+    rotY += velY; rotX += velX;
+    rotX = Math.max(-1.2, Math.min(1.2, rotX));
+  }
+  draw();
+  raf = requestAnimationFrame(animate);
+}
+
+// ── INTERACTION ──────────────────────────────────────────────────────────────
+canvas.addEventListener('mousedown', e => {
+  isDragging = true; autoRotate = false;
+  lastX = e.clientX; lastY = e.clientY;
+  velY = 0; velX = 0;
+  clearTimeout(idleTimer);
+});
+canvas.addEventListener('mousemove', e => {
+  if (isDragging) {
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    velY = dx * 0.006;
+    velX = dy * 0.006;
+    rotY -= velY;   // negate: dragging right should rotate globe eastward (right side comes toward viewer)
+    rotX += velX;
+    rotX = Math.max(-1.2, Math.min(1.2, rotX));
+    lastX = e.clientX; lastY = e.clientY;
+  }
+  // Tooltip hit test
+  hitTest(e.clientX, e.clientY);
+});
+canvas.addEventListener('mouseup', () => {
+  isDragging = false;
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { autoRotate = true; velY = -0.003; velX = 0; }, 3000);
+});
+canvas.addEventListener('mouseleave', () => {
+  isDragging = false;
+  document.getElementById('tooltip').style.display = 'none';
+});
+canvas.addEventListener('wheel', e => {
+  zoom = Math.max(0.5, Math.min(2.2, zoom - e.deltaY * 0.001));
+}, { passive: true });
+
+// Touch
+canvas.addEventListener('touchstart', e => {
+  isDragging = true; autoRotate = false;
+  lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+  velY = 0; velX = 0;
+}, { passive: true });
+canvas.addEventListener('touchmove', e => {
+  if (!isDragging) return;
+  const dx = e.touches[0].clientX - lastX;
+  const dy = e.touches[0].clientY - lastY;
+  velY = dx * 0.006; velX = dy * 0.006;
+  rotY -= velY; rotX += velX;
+  rotX = Math.max(-1.2, Math.min(1.2, rotX));
+  lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+}, { passive: true });
+canvas.addEventListener('touchend', () => {
+  isDragging = false;
+  idleTimer = setTimeout(() => { autoRotate = true; velY = 0.003; velX = 0; }, 3000);
+});
+
+// ── TOOLTIP HIT TEST ─────────────────────────────────────────────────────────
+function hitTest(mx, my) {
+  const r = R * zoom;
+  const tooltip = document.getElementById('tooltip');
+  let hit = null;
+  let bestDist = 22;
+
+  for (const c of columnCache) {
+    const base = project(c.lat, c.lon);
+    if (!base.visible) continue;
+    const scale = 1 + c.h;
+    const tipX = CX + (base.x - CX) * scale;
+    const tipY = CY + (base.y - CY) * scale;
+    // Check distance to line segment base→tip
+    const dx = tipX - base.x, dy = tipY - base.y;
+    const len2 = dx*dx + dy*dy;
+    let t = len2 > 0 ? ((mx-base.x)*dx + (my-base.y)*dy) / len2 : 0;
+    t = Math.max(0, Math.min(1, t));
+    const px = base.x + t*dx, py = base.y + t*dy;
+    const dist = Math.hypot(mx-px, my-py);
+    if (dist < bestDist) { bestDist = dist; hit = c; }
+  }
+
+  if (hit) {
+    document.getElementById('tt-cctld').textContent = hit.cctld;
+    document.getElementById('tt-country').textContent = hit.country;
+    document.getElementById('tt-capital').textContent = '🏛 ' + hit.capital;
+    document.getElementById('tt-domains').textContent = hit.domains.toLocaleString();
+    tooltip.style.display = 'block';
+    const tx = mx + 18, ty = my - 20;
+    tooltip.style.left = Math.min(tx, W - 210) + 'px';
+    tooltip.style.top = Math.max(10, ty) + 'px';
+  } else {
+    tooltip.style.display = 'none';
+  }
+}
+
+// ── LOAD GEOJSON ─────────────────────────────────────────────────────────────
+buildColumnCache();
+
+const GEOJSON_URLS = [
+  'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json',
+  'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson'
+];
+
+async function loadGeo() {
+  for (const url of GEOJSON_URLS) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const data = await res.json();
+      geoFeatures = data.features || [];
+      break;
+    } catch(e) { /* try next */ }
+  }
+  document.getElementById('loading').style.display = 'none';
+  animate();
+}
+
+loadGeo();
+</script>
+<script src="widget-nav.js"></script>
+  <script src="../../assets/ibiza-radio-widget.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cryptoclisme",
+    "name": "CryptoClisme",
+    "file": "CryptoClisme.html",
+    "category": "Analyse LinkedIn",
+    "description": "Analyse un post LinkedIn sceptique et prepare une reponse factuelle dans le ton du contradicteur ironique.",
+    "status": "ready"
+  },
+  {
+    "id": "crypto-market-pulse",
+    "name": "Crypto Market Pulse",
+    "file": "CryptoMarketPulse.html",
+    "category": "Marches crypto",
+    "description": "Tableau de suivi des marches crypto inspire de CryptoNight avec prix, tendances, alertes et exports locaux.",
+    "status": "ready"
+  },
+  {
+    "id": "tapemix",
+    "name": "TapeMix",
+    "file": "TapeMix.html",
+    "category": "Audio",
+    "description": "Mixer DJ local avec deux decks, crossfader, EQ, pitch, visualizer et enregistrement du master.",
+    "status": "ready"
+  },
+  {
+    "id": "global-cctld-globe",
+    "name": "Global ccTLD Globe",
+    "file": "GlobalCctldGlobe.html",
+    "category": "Data visualisation",
+    "description": "Globe 3D interactif affichant les volumes de domaines ccTLD par pays sous forme de colonnes.",
+    "status": "ready"
+  },
+  {
+    "id": "crypto-dca",
+    "name": "Simulateur DCA crypto",
+    "file": "crypto-dca-widget.html",
+    "category": "Finance",
+    "description": "Calcule un total investi et une valorisation indicative selon le montant, la periodicite et la duree.",
+    "status": "ready"
+  },
+  {
+    "id": "analyse-textes",
+    "name": "Atelier d'analyse",
+    "file": "analyse-textes-widget.html",
+    "category": "Analyse",
+    "description": "Colle un texte, indique l'idee a defendre, choisis un plan et genere une trame exportable.",
+    "status": "ready"
+  },
+  {
+    "id": "bibliotheque-documents",
+    "name": "Bibliotheque de documents",
+    "file": "bibliotheque-documents.html",
+    "category": "Bibliotheques",
+    "description": "Retrouve les documents, exports et fichiers importants produits avec Codex.",
+    "status": "ready"
+  },
+  {
+    "id": "bibliotheque-articles",
+    "name": "Bibliotheque d'articles",
+    "file": "library/index.html",
+    "category": "Bibliotheques",
+    "description": "Consulte les analyses, sources, favoris et versions enrichies depuis l'espace de lecture.",
+    "status": "ready"
+  }
+]

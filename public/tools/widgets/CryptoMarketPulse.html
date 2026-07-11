@@ -1,0 +1,1280 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crypto Market Pulse</title>
+  <meta name="description" content="Widget local de suivi des marches crypto avec prix, tendances, alertes et export.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23080810'/%3E%3Cpath d='M20 20h18a8 8 0 0 1 0 16H20V20Zm0 16h21a7 7 0 0 1 0 14H20V36Z' fill='none' stroke='%2300f5c8' stroke-width='5' stroke-linejoin='round'/%3E%3Cpath d='M26 12v40M36 12v40' stroke='%2300f5c8' stroke-width='4'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080810;
+      --bg-2: #0c0c18;
+      --panel: #0e0e1e;
+      --panel-2: #101022;
+      --line: #1a1a32;
+      --line-hot: rgba(0, 245, 200, .26);
+      --accent: #00f5c8;
+      --accent-2: #7b5ea7;
+      --gold: #ffd66b;
+      --green: #3eff74;
+      --red: #ff4a63;
+      --text: #f0f0ff;
+      --muted: #8585a7;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .46);
+      --radius: 14px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 40% at 10% 0%, rgba(0, 245, 200, .08), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 92% 100%, rgba(123, 94, 167, .12), transparent 62%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    a { color: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 22px;
+      border-bottom: 1px solid rgba(0, 245, 200, .12);
+      background: rgba(8, 8, 16, .82);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 8px 34px rgba(0, 0, 0, .35);
+    }
+
+    .brand {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: #080810;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 24px rgba(0, 245, 200, .28);
+    }
+
+    .mark svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+      line-height: 1.1;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .live {
+      display: inline-flex;
+      min-height: 30px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      border: 1px solid rgba(62, 255, 116, .32);
+      border-radius: 999px;
+      background: rgba(62, 255, 116, .08);
+      color: var(--green);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+    }
+
+    .live::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      50% { opacity: .38; transform: scale(.72); }
+    }
+
+    .ghost-btn,
+    .accent-btn {
+      min-height: 36px;
+      border-radius: 8px;
+      padding: 0 13px;
+      font-size: .8rem;
+      font-weight: 850;
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease, filter .18s ease;
+    }
+
+    .ghost-btn {
+      border: 1px solid rgba(0, 245, 200, .18);
+      background: transparent;
+      color: var(--text);
+    }
+
+    .accent-btn {
+      background: linear-gradient(135deg, var(--accent), #00c9a7);
+      color: #06070f;
+      box-shadow: 0 0 18px rgba(0, 245, 200, .28);
+    }
+
+    .ghost-btn:hover,
+    .accent-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+      box-shadow: 0 0 22px rgba(0, 245, 200, .28);
+    }
+
+    .shell {
+      width: min(1380px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 22px 0 34px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin-bottom: 18px;
+      padding-bottom: 2px;
+    }
+
+    .nav-tab {
+      min-height: 38px;
+      border-radius: 8px;
+      padding: 0 14px;
+      white-space: nowrap;
+      background: transparent;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 850;
+    }
+
+    .nav-tab.is-active {
+      background: rgba(0, 245, 200, .12);
+      color: var(--accent);
+      box-shadow: 0 0 16px rgba(0, 245, 200, .12);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+
+    .headline,
+    .quick-panel,
+    .panel,
+    .token-card,
+    .alert-row {
+      border: 1px solid rgba(0, 245, 200, .1);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(16, 16, 34, .96), rgba(10, 10, 24, .96));
+      box-shadow: var(--shadow);
+    }
+
+    .headline {
+      min-height: 230px;
+      padding: clamp(22px, 4vw, 34px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .headline::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      bottom: -90px;
+      width: 320px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 245, 200, .12), transparent 68%);
+      pointer-events: none;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin: 0;
+      font-size: clamp(2.25rem, 5.6vw, 5rem);
+      line-height: .94;
+      letter-spacing: 0;
+    }
+
+    .cyan { color: var(--accent); }
+
+    .intro {
+      max-width: 680px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    .quick-panel {
+      padding: 18px;
+      display: grid;
+      align-content: space-between;
+      gap: 16px;
+    }
+
+    .quick-panel h2,
+    .panel h2 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.1;
+    }
+
+    .watchlist {
+      display: grid;
+      gap: 10px;
+    }
+
+    .watch-row {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 58px;
+      padding: 9px;
+      border: 1px solid rgba(255, 255, 255, .06);
+      border-radius: 10px;
+      background: rgba(8, 8, 16, .58);
+    }
+
+    .coin-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: rgba(255, 255, 255, .06);
+      color: #080810;
+      font-weight: 950;
+    }
+
+    .coin-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .watch-row strong,
+    .token-info strong {
+      display: block;
+      font-size: .92rem;
+    }
+
+    .watch-row span,
+    .token-info span {
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+
+    .watch-price {
+      text-align: right;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      min-height: 76px;
+      padding: 13px;
+      border: 1px solid rgba(0, 245, 200, .1);
+      border-radius: 10px;
+      background: rgba(14, 14, 30, .82);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 7px;
+      color: var(--accent);
+      font-size: clamp(1.05rem, 2vw, 1.45rem);
+      line-height: 1.05;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    input,
+    select {
+      min-height: 38px;
+      border: 1px solid rgba(0, 245, 200, .14);
+      border-radius: 8px;
+      outline: 0;
+      background: rgba(8, 8, 16, .78);
+      color: var(--text);
+      padding: 0 11px;
+      font-size: .84rem;
+      font-weight: 750;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 245, 200, .12);
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .token-card {
+      position: relative;
+      min-height: 196px;
+      padding: 16px;
+      overflow: hidden;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .token-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(0, 245, 200, .42);
+      box-shadow: 0 22px 60px rgba(0, 245, 200, .08);
+    }
+
+    .token-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .token-left {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 10px;
+    }
+
+    .rank {
+      position: absolute;
+      top: 13px;
+      right: 13px;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 900;
+    }
+
+    .price {
+      margin-top: 18px;
+      font-size: clamp(1.35rem, 3vw, 1.8rem);
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .change {
+      display: inline-flex;
+      min-height: 27px;
+      align-items: center;
+      margin-top: 10px;
+      padding: 0 9px;
+      border-radius: 7px;
+      font-size: .78rem;
+      font-weight: 950;
+    }
+
+    .up {
+      color: var(--green);
+      background: rgba(62, 255, 116, .1);
+    }
+
+    .down {
+      color: var(--red);
+      background: rgba(255, 74, 99, .1);
+    }
+
+    .sparkline {
+      width: 100%;
+      height: 48px;
+      margin-top: 12px;
+      display: block;
+    }
+
+    .token-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 750;
+    }
+
+    .screen { display: none; }
+    .screen.is-active { display: block; }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .chart-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chart-price {
+      margin-top: 8px;
+      color: var(--accent);
+      font-size: clamp(1.8rem, 4vw, 2.65rem);
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    #main-chart {
+      width: 100%;
+      height: 280px;
+      display: block;
+    }
+
+    .side-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .side-metric {
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, .06);
+      border-radius: 10px;
+      background: rgba(8, 8, 16, .58);
+    }
+
+    .side-metric span {
+      display: block;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .side-metric strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1rem;
+    }
+
+    .alert-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
+      font-size: .74rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .alert-row {
+      min-height: 58px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+      box-shadow: none;
+    }
+
+    .alert-tag {
+      display: inline-flex;
+      min-height: 25px;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 6px;
+      font-size: .72rem;
+      font-weight: 950;
+    }
+
+    .toast-stack {
+      position: fixed;
+      top: 82px;
+      right: 16px;
+      z-index: 30;
+      display: grid;
+      gap: 8px;
+      width: min(320px, calc(100vw - 32px));
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 214, 107, .36);
+      border-radius: 10px;
+      background: rgba(16, 16, 32, .96);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .45);
+      font-size: .82rem;
+      animation: toastIn .2s ease;
+    }
+
+    .toast strong {
+      display: block;
+      color: var(--gold);
+      margin-bottom: 3px;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(20px); }
+    }
+
+    .empty,
+    .loading {
+      padding: 42px 18px;
+      border: 1px dashed rgba(0, 245, 200, .18);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+      font-weight: 750;
+    }
+
+    .loader {
+      width: 38px;
+      height: 38px;
+      margin: 0 auto 12px;
+      border: 3px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .attribution {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0, 245, 200, .08);
+      color: var(--muted);
+      font-size: .75rem;
+      text-align: center;
+    }
+
+    @media (max-width: 920px) {
+      .hero,
+      .chart-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .alert-form {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .alert-form .accent-btn {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .shell {
+        width: min(100% - 20px, 1380px);
+        padding-top: 14px;
+      }
+
+      .headline {
+        min-height: 0;
+      }
+
+      .stats-grid,
+      .alert-form {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .filters input,
+      .filters select,
+      .filters .ghost-btn,
+      .filters .accent-btn {
+        width: 100%;
+      }
+
+      .token-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="lazyapp-widget-shell.css">
+</head>
+<body>
+  <div class="lazyapp-widget-back"><span>Lazy App · Widget dedie</span><a href="../../index.html#realisations">Retour au site</a></div>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="Retour a la bibliotheque">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M8 4v16M13 4v16M7 7h7.3a3.2 3.2 0 0 1 0 6.4H7V7Zm0 6.4h8.2a3 3 0 0 1 0 6H7v-6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>
+        <strong>Crypto<span class="cyan">Pulse</span></strong>
+        <span>inspire de CryptoNight</span>
+      </span>
+    </a>
+    <div class="top-actions">
+      <span class="live">LIVE</span>
+      <span id="refresh-label" style="color: var(--muted); font-size: .78rem; font-weight: 750;">Chargement...</span>
+      <button class="ghost-btn" id="refresh-btn" type="button">Rafraichir</button>
+    </div>
+  </header>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+  <main class="shell">
+    <nav class="nav-tabs" aria-label="Sections du widget">
+      <button class="nav-tab is-active" type="button" data-screen="market">Marche</button>
+      <button class="nav-tab" type="button" data-screen="chart">Tendances</button>
+      <button class="nav-tab" type="button" data-screen="alerts">Alertes</button>
+      <button class="nav-tab" type="button" data-screen="export">Export</button>
+    </nav>
+
+    <section class="hero" aria-label="Resume du marche">
+      <div class="headline">
+        <h1>Suivi crypto en temps quasi reel<span class="cyan">.</span></h1>
+        <p class="intro">Prix, variations 24h, capitalisation, mini-graphiques, alertes locales et export des donnees. Le widget utilise CoinGecko quand la connexion est disponible et bascule sur un jeu de donnees de demonstration sinon.</p>
+      </div>
+      <aside class="quick-panel">
+        <h2>Watchlist rapide</h2>
+        <div class="watchlist" id="watchlist"></div>
+      </aside>
+    </section>
+
+    <section class="stats-grid" id="stats-grid" aria-label="Indicateurs globaux"></section>
+
+    <section class="screen is-active" id="market-screen">
+      <div class="toolbar">
+        <h2 style="margin:0;font-size:1rem;">Actifs suivis</h2>
+        <div class="filters">
+          <input id="search" type="search" placeholder="Rechercher BTC, ETH..." aria-label="Rechercher une crypto">
+          <select id="sort" aria-label="Tri">
+            <option value="rank">Rang marche</option>
+            <option value="gainers">Meilleures hausses</option>
+            <option value="losers">Plus fortes baisses</option>
+            <option value="volume">Volume 24h</option>
+          </select>
+          <button class="ghost-btn" id="demo-toggle" type="button">Mode demo</button>
+        </div>
+      </div>
+      <div class="token-grid" id="token-grid">
+        <div class="loading"><div class="loader"></div>Recuperation des marches...</div>
+      </div>
+    </section>
+
+    <section class="screen" id="chart-screen">
+      <div class="chart-layout">
+        <div class="panel">
+          <div class="chart-head">
+            <div>
+              <h2 id="chart-title">Tendance</h2>
+              <div class="chart-price" id="chart-price">--</div>
+            </div>
+            <div class="filters">
+              <select id="chart-coin" aria-label="Crypto du graphique"></select>
+              <select id="chart-range" aria-label="Periode du graphique">
+                <option value="1">24h</option>
+                <option value="7" selected>7 jours</option>
+                <option value="30">30 jours</option>
+              </select>
+            </div>
+          </div>
+          <div id="chart-area"><svg id="main-chart" viewBox="0 0 800 280" preserveAspectRatio="none"></svg></div>
+        </div>
+        <aside class="panel">
+          <h2>Details</h2>
+          <div class="side-list" id="chart-details" style="margin-top:12px;"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="alerts-screen">
+      <div class="panel">
+        <h2>Alertes locales</h2>
+        <div class="alert-form" style="margin-top:14px;">
+          <label>Crypto
+            <select id="alert-coin"></select>
+          </label>
+          <label>Condition
+            <select id="alert-condition">
+              <option value="above">Au-dessus de</option>
+              <option value="below">En-dessous de</option>
+            </select>
+          </label>
+          <label>Prix cible USD
+            <input id="alert-price" type="number" min="0" step="0.000001" placeholder="65000">
+          </label>
+          <button class="accent-btn" id="add-alert" type="button">Ajouter</button>
+        </div>
+        <div id="alerts-list"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="export-screen">
+      <div class="panel">
+        <h2>Exporter les donnees</h2>
+        <p style="max-width:680px;color:var(--muted);line-height:1.5;font-weight:650;">Telecharge un instantane du marche ou la liste de tes alertes. Les alertes restent stockees dans ce navigateur.</p>
+        <div class="filters" style="margin-top:16px;">
+          <button class="accent-btn" id="export-csv" type="button">Exporter CSV</button>
+          <button class="ghost-btn" id="export-json" type="button">Exporter JSON</button>
+          <button class="ghost-btn" id="export-alerts" type="button">Exporter alertes</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="attribution">Donnees live via CoinGecko API publique. Ceci n'est pas un conseil financier.</div>
+  </main>
+
+  <script>
+    const API = "https://api.coingecko.com/api/v3";
+    const COINS = ["bitcoin","ethereum","solana","ripple","binancecoin","dogecoin","cardano","avalanche-2","chainlink","polkadot","polygon-ecosystem-token","litecoin"];
+    const FALLBACK = [
+      ["bitcoin","Bitcoin","btc",64280,2.64,1262200000000,28400000000,65120,62110],
+      ["ethereum","Ethereum","eth",3420,-1.18,411600000000,14900000000,3510,3360],
+      ["solana","Solana","sol",151.22,5.42,70400000000,3830000000,155.8,143.1],
+      ["ripple","XRP","xrp",0.612,1.07,33800000000,1220000000,0.63,0.59],
+      ["binancecoin","BNB","bnb",585.7,-0.74,86500000000,914000000,593.4,579.8],
+      ["dogecoin","Dogecoin","doge",0.123,-2.2,17900000000,688000000,0.128,0.12],
+      ["cardano","Cardano","ada",0.438,3.16,15600000000,401000000,0.45,0.421],
+      ["avalanche-2","Avalanche","avax",28.42,-0.52,11400000000,332000000,29.1,27.8],
+      ["chainlink","Chainlink","link",14.86,1.9,9250000000,481000000,15.2,14.1],
+      ["polkadot","Polkadot","dot",6.37,-1.33,9300000000,210000000,6.58,6.22],
+      ["polygon-ecosystem-token","Polygon","pol",0.51,0.82,4300000000,152000000,0.53,0.49],
+      ["litecoin","Litecoin","ltc",73.21,2.08,5460000000,396000000,74.4,70.6]
+    ];
+
+    let market = [];
+    let previousPrices = {};
+    let alerts = JSON.parse(localStorage.getItem("cryptoPulseAlerts") || "[]");
+    let useDemo = false;
+    let countdownTimer = null;
+
+    const els = {
+      tokenGrid: document.getElementById("token-grid"),
+      statsGrid: document.getElementById("stats-grid"),
+      watchlist: document.getElementById("watchlist"),
+      refreshLabel: document.getElementById("refresh-label"),
+      search: document.getElementById("search"),
+      sort: document.getElementById("sort"),
+      chartCoin: document.getElementById("chart-coin"),
+      chartRange: document.getElementById("chart-range"),
+      chartTitle: document.getElementById("chart-title"),
+      chartPrice: document.getElementById("chart-price"),
+      chartDetails: document.getElementById("chart-details"),
+      alertCoin: document.getElementById("alert-coin"),
+      alertCondition: document.getElementById("alert-condition"),
+      alertPrice: document.getElementById("alert-price"),
+      alertsList: document.getElementById("alerts-list"),
+      toastStack: document.getElementById("toast-stack")
+    };
+
+    function demoData() {
+      return FALLBACK.map((row, index) => {
+        const [id, name, symbol, price, change, marketCap, volume, high, low] = row;
+        const wobble = 1 + (Math.sin(Date.now() / 240000 + index) * 0.006);
+        const current = price * wobble;
+        return {
+          id, name, symbol,
+          current_price: current,
+          price_change_percentage_24h: change + Math.sin(Date.now() / 180000 + index) * .45,
+          market_cap: marketCap * wobble,
+          total_volume: volume * (1 + Math.cos(Date.now() / 260000 + index) * .08),
+          high_24h: high,
+          low_24h: low,
+          market_cap_rank: index + 1,
+          image: "",
+          sparkline_in_7d: { price: Array.from({ length: 54 }, (_, i) => current * (1 + Math.sin(i / 5 + index) * .018 + (i - 27) * .0006)) }
+        };
+      });
+    }
+
+    async function fetchMarket(forceDemo = false) {
+      els.refreshLabel.textContent = "Mise a jour...";
+      if (forceDemo || useDemo) {
+        market = demoData();
+        renderAll();
+        startCountdown("Mode demo");
+        return;
+      }
+      try {
+        const url = `${API}/coins/markets?vs_currency=usd&ids=${COINS.join(",")}&order=market_cap_desc&per_page=12&page=1&sparkline=true&price_change_percentage=24h`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        market = await res.json();
+        renderAll();
+        startCountdown("Live");
+      } catch (error) {
+        useDemo = true;
+        market = demoData();
+        renderAll();
+        startCountdown("Demo apres erreur reseau");
+        toast("Donnees de demonstration", "L'API live est indisponible pour le moment.");
+      }
+    }
+
+    function renderAll() {
+      populateSelects();
+      renderStats();
+      renderWatchlist();
+      renderCards();
+      renderChart();
+      renderAlerts();
+      checkAlerts();
+    }
+
+    function renderStats() {
+      const cap = market.reduce((sum, c) => sum + (c.market_cap || 0), 0);
+      const volume = market.reduce((sum, c) => sum + (c.total_volume || 0), 0);
+      const avg = market.reduce((sum, c) => sum + (c.price_change_percentage_24h || 0), 0) / Math.max(market.length, 1);
+      const best = [...market].sort((a, b) => (b.price_change_percentage_24h || 0) - (a.price_change_percentage_24h || 0))[0];
+      els.statsGrid.innerHTML = [
+        ["Capitalisation", fmtBig(cap)],
+        ["Volume 24h", fmtBig(volume)],
+        ["Moyenne 24h", `${avg >= 0 ? "+" : ""}${avg.toFixed(2)}%`],
+        ["Leader", best ? `${best.symbol.toUpperCase()} ${best.price_change_percentage_24h >= 0 ? "+" : ""}${best.price_change_percentage_24h.toFixed(2)}%` : "--"]
+      ].map(([label, value]) => `<article class="stat"><span>${label}</span><strong>${value}</strong></article>`).join("");
+    }
+
+    function renderWatchlist() {
+      els.watchlist.innerHTML = market.slice(0, 4).map(coin => `
+        <div class="watch-row">
+          ${coinBadge(coin)}
+          <div><strong>${coin.name}</strong><span>${coin.symbol}</span></div>
+          <div class="watch-price">${fmt(coin.current_price)}</div>
+        </div>
+      `).join("");
+    }
+
+    function filteredMarket() {
+      const q = els.search.value.trim().toLowerCase();
+      let rows = market.filter(coin => !q || coin.name.toLowerCase().includes(q) || coin.symbol.toLowerCase().includes(q));
+      if (els.sort.value === "gainers") rows.sort((a, b) => (b.price_change_percentage_24h || 0) - (a.price_change_percentage_24h || 0));
+      if (els.sort.value === "losers") rows.sort((a, b) => (a.price_change_percentage_24h || 0) - (b.price_change_percentage_24h || 0));
+      if (els.sort.value === "volume") rows.sort((a, b) => (b.total_volume || 0) - (a.total_volume || 0));
+      if (els.sort.value === "rank") rows.sort((a, b) => (a.market_cap_rank || 999) - (b.market_cap_rank || 999));
+      return rows;
+    }
+
+    function renderCards() {
+      const rows = filteredMarket();
+      if (!rows.length) {
+        els.tokenGrid.innerHTML = `<div class="empty">Aucun actif ne correspond a cette recherche.</div>`;
+        return;
+      }
+      els.tokenGrid.innerHTML = rows.map(coin => {
+        const change = coin.price_change_percentage_24h || 0;
+        const positive = change >= 0;
+        return `
+          <article class="token-card" data-coin="${coin.id}" onclick="openChart('${coin.id}')">
+            <span class="rank">#${coin.market_cap_rank || "--"}</span>
+            <div class="token-top">
+              <div class="token-left">
+                ${coinBadge(coin)}
+                <div class="token-info"><strong>${coin.name}</strong><span>${coin.symbol}</span></div>
+              </div>
+            </div>
+            <div class="price">${fmt(coin.current_price)}</div>
+            <span class="change ${positive ? "up" : "down"}">${positive ? "+" : ""}${change.toFixed(2)}%</span>
+            <svg class="sparkline" viewBox="0 0 260 48" preserveAspectRatio="none">${sparkline(coin)}</svg>
+            <div class="token-meta">
+              <span>Vol ${fmtBig(coin.total_volume)}</span>
+              <span>H ${fmt(coin.high_24h)}</span>
+              <span>B ${fmt(coin.low_24h)}</span>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function coinBadge(coin) {
+      if (coin.image) return `<span class="coin-badge"><img src="${coin.image}" alt=""></span>`;
+      return `<span class="coin-badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));">${coin.symbol.slice(0, 1).toUpperCase()}</span>`;
+    }
+
+    function sparkline(coin) {
+      const data = coin.sparkline_in_7d?.price || [];
+      if (data.length < 2) return "";
+      const w = 260, h = 48;
+      const min = Math.min(...data);
+      const max = Math.max(...data);
+      const range = max - min || 1;
+      const points = data.map((value, index) => {
+        const x = index / (data.length - 1) * w;
+        const y = h - ((value - min) / range) * (h - 5) - 2;
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      });
+      const path = "M" + points.join("L");
+      const positive = data[data.length - 1] >= data[0];
+      const color = positive ? "var(--green)" : "var(--red)";
+      return `<path d="${path}L${w},${h}L0,${h}Z" fill="${positive ? "rgba(62,255,116,.12)" : "rgba(255,74,99,.12)"}"></path><path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"></path>`;
+    }
+
+    function populateSelects() {
+      const options = market.map(coin => `<option value="${coin.id}">${coin.name} (${coin.symbol.toUpperCase()})</option>`).join("");
+      const chartValue = els.chartCoin.value;
+      const alertValue = els.alertCoin.value;
+      els.chartCoin.innerHTML = options;
+      els.alertCoin.innerHTML = options;
+      if (chartValue) els.chartCoin.value = chartValue;
+      if (alertValue) els.alertCoin.value = alertValue;
+    }
+
+    async function renderChart() {
+      const id = els.chartCoin.value || market[0]?.id;
+      const coin = market.find(item => item.id === id) || market[0];
+      if (!coin) return;
+      els.chartCoin.value = coin.id;
+      els.chartTitle.textContent = `${coin.name} (${coin.symbol.toUpperCase()})`;
+      els.chartPrice.textContent = fmt(coin.current_price);
+      els.chartDetails.innerHTML = [
+        ["Variation 24h", `${coin.price_change_percentage_24h >= 0 ? "+" : ""}${(coin.price_change_percentage_24h || 0).toFixed(2)}%`],
+        ["Plus haut 24h", fmt(coin.high_24h)],
+        ["Plus bas 24h", fmt(coin.low_24h)],
+        ["Volume 24h", fmtBig(coin.total_volume)],
+        ["Capitalisation", fmtBig(coin.market_cap)]
+      ].map(([label, value]) => `<div class="side-metric"><span>${label}</span><strong>${value}</strong></div>`).join("");
+
+      const range = els.chartRange.value;
+      let data = coin.sparkline_in_7d?.price || [];
+      if (!useDemo) {
+        try {
+          const res = await fetch(`${API}/coins/${coin.id}/market_chart?vs_currency=usd&days=${range}`);
+          if (res.ok) {
+            const json = await res.json();
+            data = json.prices.map(point => point[1]);
+          }
+        } catch (error) {}
+      }
+      drawMainChart(data);
+    }
+
+    function drawMainChart(data) {
+      const area = document.getElementById("chart-area");
+      if (!data || data.length < 2) {
+        area.innerHTML = `<div class="empty">Graphique indisponible pour cet actif.</div>`;
+        return;
+      }
+      area.innerHTML = `<svg id="main-chart" viewBox="0 0 800 280" preserveAspectRatio="none"></svg>`;
+      const svg = document.getElementById("main-chart");
+      const w = 800, h = 280;
+      const min = Math.min(...data);
+      const max = Math.max(...data);
+      const range = max - min || 1;
+      const points = data.map((value, index) => {
+        const x = index / (data.length - 1) * w;
+        const y = h - ((value - min) / range) * (h - 36) - 18;
+        return [x, y];
+      });
+      const path = "M" + points.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join("L");
+      const areaPath = `${path}L${w},${h}L0,${h}Z`;
+      const positive = data[data.length - 1] >= data[0];
+      const color = positive ? "#3eff74" : "#ff4a63";
+      const grid = [0, .25, .5, .75, 1].map(step => {
+        const y = h - step * (h - 36) - 18;
+        return `<line x1="0" y1="${y}" x2="${w}" y2="${y}" stroke="rgba(255,255,255,.06)"></line>`;
+      }).join("");
+      svg.innerHTML = `
+        <defs>
+          <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="${color}" stop-opacity=".26"></stop>
+            <stop offset="100%" stop-color="${color}" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+        ${grid}
+        <path d="${areaPath}" fill="url(#chartFill)"></path>
+        <path d="${path}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"></path>
+        <circle cx="${points[points.length - 1][0].toFixed(1)}" cy="${points[points.length - 1][1].toFixed(1)}" r="6" fill="${color}" stroke="#080810" stroke-width="3"></circle>
+      `;
+    }
+
+    function openChart(id) {
+      showScreen("chart");
+      els.chartCoin.value = id;
+      renderChart();
+    }
+
+    function addAlert() {
+      const price = Number(els.alertPrice.value);
+      if (!price || price <= 0) {
+        toast("Prix invalide", "Entre un prix cible superieur a zero.");
+        return;
+      }
+      alerts.push({
+        id: Date.now(),
+        coin: els.alertCoin.value,
+        condition: els.alertCondition.value,
+        price,
+        triggered: false
+      });
+      els.alertPrice.value = "";
+      saveAlerts();
+      renderAlerts();
+      checkAlerts();
+      renderAlerts();
+      toast("Alerte ajoutee", "Elle est verifiee maintenant puis a chaque mise a jour.");
+    }
+
+    function renderAlerts() {
+      if (!alerts.length) {
+        els.alertsList.innerHTML = `<div class="empty">Aucune alerte pour le moment.</div>`;
+        return;
+      }
+      els.alertsList.innerHTML = alerts.map(alert => {
+        const coin = market.find(item => item.id === alert.coin);
+        const symbol = coin ? coin.symbol.toUpperCase() : alert.coin;
+        const current = coin ? fmt(coin.current_price) : "--";
+        const isAbove = alert.condition === "above";
+        return `
+          <div class="alert-row">
+            <div>
+              <strong>${symbol} ${isAbove ? "au-dessus" : "en-dessous"} de ${fmt(alert.price)}</strong>
+              <div style="margin-top:4px;color:var(--muted);font-size:.76rem;font-weight:750;">Actuel ${current} · ${alert.triggered ? "declenchee" : "surveillance"}</div>
+            </div>
+            <div class="filters">
+              <span class="alert-tag ${isAbove ? "down" : "up"}">${isAbove ? "Seuil haut" : "Seuil bas"}</span>
+              <button class="ghost-btn" type="button" onclick="removeAlert(${alert.id})">Supprimer</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function checkAlerts() {
+      let changed = false;
+      alerts.forEach(alert => {
+        if (alert.triggered) return;
+        const coin = market.find(item => item.id === alert.coin);
+        if (!coin) return;
+        const hit = alert.condition === "above" ? coin.current_price >= alert.price : coin.current_price <= alert.price;
+        if (hit) {
+          alert.triggered = true;
+          changed = true;
+          toast("Alerte declenchee", `${coin.symbol.toUpperCase()} est a ${fmt(coin.current_price)}.`);
+        }
+      });
+      if (changed) saveAlerts();
+    }
+
+    function removeAlert(id) {
+      alerts = alerts.filter(alert => alert.id !== id);
+      saveAlerts();
+      renderAlerts();
+    }
+
+    function saveAlerts() {
+      localStorage.setItem("cryptoPulseAlerts", JSON.stringify(alerts));
+    }
+
+    function showScreen(name) {
+      document.querySelectorAll(".screen").forEach(screen => screen.classList.toggle("is-active", screen.id === `${name}-screen`));
+      document.querySelectorAll(".nav-tab").forEach(tab => tab.classList.toggle("is-active", tab.dataset.screen === name));
+      if (name === "chart") renderChart();
+      if (name === "alerts") renderAlerts();
+    }
+
+    function exportMarket(format) {
+      if (!market.length) return;
+      if (format === "json") {
+        download("crypto-market-pulse.json", JSON.stringify({ exported_at: new Date().toISOString(), market }, null, 2), "application/json");
+        return;
+      }
+      const head = "rank,name,symbol,price_usd,change_24h,market_cap,volume_24h,high_24h,low_24h\n";
+      const rows = market.map(coin => [
+        coin.market_cap_rank,
+        `"${coin.name}"`,
+        coin.symbol.toUpperCase(),
+        coin.current_price,
+        coin.price_change_percentage_24h,
+        coin.market_cap,
+        coin.total_volume,
+        coin.high_24h,
+        coin.low_24h
+      ].join(",")).join("\n");
+      download("crypto-market-pulse.csv", head + rows, "text/csv");
+    }
+
+    function exportAlerts() {
+      const head = "coin,condition,target_price,triggered\n";
+      const rows = alerts.map(alert => [alert.coin, alert.condition, alert.price, alert.triggered].join(",")).join("\n");
+      download("crypto-alerts.csv", head + rows, "text/csv");
+    }
+
+    function download(name, content, type) {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(new Blob([content], { type }));
+      link.download = name;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    }
+
+    function toast(title, body) {
+      const item = document.createElement("div");
+      item.className = "toast";
+      item.innerHTML = `<strong>${title}</strong><span>${body}</span>`;
+      els.toastStack.appendChild(item);
+      setTimeout(() => item.remove(), 4200);
+    }
+
+    function startCountdown(label) {
+      let left = 30;
+      clearInterval(countdownTimer);
+      els.refreshLabel.textContent = `${label} · prochaine MAJ dans ${left}s`;
+      countdownTimer = setInterval(() => {
+        left -= 1;
+        els.refreshLabel.textContent = `${label} · prochaine MAJ dans ${left}s`;
+        if (left <= 0) clearInterval(countdownTimer);
+      }, 1000);
+    }
+
+    function fmt(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return "--";
+      if (Math.abs(value) >= 1000) return "$" + value.toLocaleString("en-US", { maximumFractionDigits: 2 });
+      if (Math.abs(value) >= 1) return "$" + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+      return "$" + value.toFixed(6);
+    }
+
+    function fmtBig(value) {
+      if (!value) return "--";
+      if (value >= 1e12) return "$" + (value / 1e12).toFixed(2) + "T";
+      if (value >= 1e9) return "$" + (value / 1e9).toFixed(2) + "B";
+      if (value >= 1e6) return "$" + (value / 1e6).toFixed(2) + "M";
+      return "$" + Math.round(value).toLocaleString("en-US");
+    }
+
+    document.querySelectorAll(".nav-tab").forEach(tab => tab.addEventListener("click", () => showScreen(tab.dataset.screen)));
+    document.getElementById("refresh-btn").addEventListener("click", () => fetchMarket());
+    document.getElementById("demo-toggle").addEventListener("click", () => {
+      useDemo = !useDemo;
+      document.getElementById("demo-toggle").textContent = useDemo ? "Revenir au live" : "Mode demo";
+      fetchMarket(useDemo);
+    });
+    els.search.addEventListener("input", renderCards);
+    els.sort.addEventListener("change", renderCards);
+    els.chartCoin.addEventListener("change", renderChart);
+    els.chartRange.addEventListener("change", renderChart);
+    document.getElementById("add-alert").addEventListener("click", addAlert);
+    document.getElementById("export-csv").addEventListener("click", () => exportMarket("csv"));
+    document.getElementById("export-json").addEventListener("click", () => exportMarket("json"));
+    document.getElementById("export-alerts").addEventListener("click", exportAlerts);
+
+    fetchMarket();
+    setInterval(() => fetchMarket(), 30000);
+  </script>
+  <script src="widget-nav.js"></script>
+  <script src="../../assets/ibiza-radio-widget.js" defer></script>
+</body>
+</html>

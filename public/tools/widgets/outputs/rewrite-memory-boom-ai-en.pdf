@@ -1,0 +1,191 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Length 3333 >>
+stream
+BT
+/F1 11 Tf
+54 788 Td
+/F1 16 Tf
+(The Memory Boom Behind AI) Tj
+0 -16 Td
+/F1 11 Tf
+() Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(SK Hynix has become one of the clearest winners of the AI buildout. The South Korean) Tj
+0 -16 Td
+(memory-chip maker, once viewed as a deeply cyclical commodity business, is now) Tj
+0 -16 Td
+(benefiting from intense demand for high-bandwidth memory, the specialized DRAM used) Tj
+0 -16 Td
+(alongside advanced AI processors.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(The change is dramatic. SK Hynix has historically operated in one of the most volatile) Tj
+0 -16 Td
+(parts of the semiconductor market, where oversupply can quickly turn profits into) Tj
+0 -16 Td
+(losses. The company was rescued by creditors in 2001, struggled for years to find a) Tj
+0 -16 Td
+(buyer, and was eventually acquired by SK Group in 2012 at a distressed valuation. As) Tj
+0 -16 Td
+(recently as 2023, it reported a large annual loss.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(Today, the picture looks very different. Demand for AI infrastructure has made memory a) Tj
+0 -16 Td
+(strategic resource. Large language models require constant movement of vast amounts of) Tj
+0 -16 Td
+(data between memory chips and compute chips, especially GPUs. High-bandwidth memory) Tj
+0 -16 Td
+(helps reduce that bottleneck by stacking DRAM close to the processor, allowing data to) Tj
+0 -16 Td
+(move faster and more efficiently.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(SK Hynix entered this market early. It began developing high-bandwidth memory years) Tj
+0 -16 Td
+(before the current AI boom, even though the investment once looked uncertain. What was) Tj
+0 -16 Td
+(previously seen as a difficult and possibly outdated product has become essential to) Tj
+0 -16 Td
+(modern AI accelerators.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(That shift has transformed expectations for the company. SK Hynix is now expected to) Tj
+0 -16 Td
+(generate enormous profits, pay unusually large employee bonuses, and contribute) Tj
+0 -16 Td
+(significantly to South Korea's tax revenues. Its employees have also become cultural) Tj
+0 -16 Td
+(symbols of the country's new semiconductor wealth, with the company's status rising far) Tj
+0 -16 Td
+(beyond the technology sector.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(Investors have responded accordingly. SK Hynix shares have risen sharply since 2019,) Tj
+0 -16 Td
+(while other memory producers have also benefited from the market's reassessment of DRAM) Tj
+0 -16 Td
+(and HBM suppliers. Micron, the only major U.S.-based DRAM producer, has also become) Tj
+0 -16 Td
+(central to the AI memory trade.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(Still, the opportunity carries risk. DRAM remains cyclical, and memory buyers are) Tj
+0 -16 Td
+(already looking for ways to reduce usage. China is expanding production capacity, and) Tj
+0 -16 Td
+(new supply could eventually pressure prices. Even high-bandwidth memory, despite its) Tj
+0 -16 Td
+(technical complexity, is still tied to the broader economics of memory manufacturing.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(For now, investors appear to believe the favorable cycle can continue for at least a few) Tj
+0 -16 Td
+(more years. AI infrastructure spending remains intense, U.S. hyperscalers are committing) Tj
+0 -16 Td
+(enormous capital to data centers, and agentic AI systems may require even more memory) Tj
+0 -16 Td
+(than earlier chatbot-style applications.) Tj
+ET
+endstream
+endobj
+3 0 obj
+<< /Type /Page /Parent 6 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>
+endobj
+4 0 obj
+<< /Length 1626 >>
+stream
+BT
+/F1 11 Tf
+54 788 Td
+() Tj
+0 -16 Td
+(The central question is how long the shortage lasts. If AI demand continues to grow) Tj
+0 -16 Td
+(faster than memory supply, companies like SK Hynix and Micron may keep enjoying) Tj
+0 -16 Td
+(exceptional profits. If supply catches up or customers find ways to use less memory, the) Tj
+0 -16 Td
+(current boom could fade quickly.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(For AI investors, memory has become impossible to ignore. The companies building the) Tj
+0 -16 Td
+(infrastructure may still dominate the headlines, but the suppliers of the memory behind) Tj
+0 -16 Td
+(that infrastructure are now just as important to watch.) Tj
+0 -16 Td
+() Tj
+0 -22 Td
+/F1 16 Tf
+(Key Points) Tj
+0 -16 Td
+/F1 11 Tf
+() Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(- SK Hynix has moved from a historically cyclical memory business into a central role in) Tj
+0 -16 Td
+(the AI supply chain.) Tj
+0 -16 Td
+(- High-bandwidth memory is critical because AI workloads depend on fast movement of data) Tj
+0 -16 Td
+(between memory and processors.) Tj
+0 -16 Td
+(- The company's early investment in HBM has become a major advantage.) Tj
+0 -16 Td
+(- Surging profits may bring large employee bonuses and major tax revenue for South) Tj
+0 -16 Td
+(Korea.) Tj
+0 -16 Td
+(- Micron and other memory producers are also benefiting from the AI memory cycle.) Tj
+0 -16 Td
+(- The main risk is that DRAM remains cyclical, with future supply growth and efficiency) Tj
+0 -16 Td
+(improvements likely to pressure prices eventually.) Tj
+0 -16 Td
+(- The AI boom may last longer if demand for memory keeps growing faster than production) Tj
+0 -16 Td
+(capacity.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 6 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+7 0 obj
+<< /Type /Catalog /Pages 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000003464 00000 n 
+0000003590 00000 n 
+0000005268 00000 n 
+0000005394 00000 n 
+0000005457 00000 n 
+trailer
+<< /Size 8 /Root 7 0 R /Info << /Title (The Memory Boom Behind AI) >> >>
+startxref
+5506
+%%EOF

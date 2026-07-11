@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atelier d’analyse</title>
+  <style>
+    :root {
+      --bg: #f3f0ea;
+      --surface: #ffffff;
+      --surface-soft: #fbfaf7;
+      --ink: #141311;
+      --muted: #6f675d;
+      --line: #ddd6ca;
+      --line-strong: #c8bcad;
+      --accent: #b56e28;
+      --accent-soft: #fff1df;
+      --dark: #151412;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 44px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .back {
+      display: inline-flex;
+      min-height: 36px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      padding: 7px 12px;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(38px, 7vw, 72px);
+      line-height: .94;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 22px);
+      line-height: 1.32;
+      font-weight: 650;
+    }
+
+    .mode-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 16px;
+    }
+
+    .mode-card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .mode-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.4;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(380px, .84fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 16px;
+      box-shadow: 0 18px 50px rgba(34, 28, 21, .08);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+    }
+
+    label span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      outline: 0;
+      background: var(--surface-soft);
+      color: var(--ink);
+      padding: 10px 11px;
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .primary,
+    .secondary {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 850;
+      padding: 8px 12px;
+    }
+
+    .primary {
+      border: 1px solid var(--dark);
+      background: var(--dark);
+      color: #fff;
+    }
+
+    .secondary {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .secondary:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .output {
+      min-height: 620px;
+      max-height: 78vh;
+      overflow: auto;
+      white-space: pre-wrap;
+      border-radius: 8px;
+      background: var(--dark);
+      color: #fbf6ee;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.55;
+      padding: 16px;
+    }
+
+    .library {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .saved-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface-soft);
+      padding: 12px;
+    }
+
+    .saved-card h3 {
+      margin: 0 0 6px;
+      font-size: 15px;
+    }
+
+    .saved-card p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .saved-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .empty {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .output {
+        min-height: 420px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="lazyapp-widget-shell.css">
+</head>
+<body>
+  <div class="lazyapp-widget-back"><span>Lazy App · Widget dedie</span><a href="../../index.html#realisations">Retour au site</a></div>
+  <main class="shell">
+    <div class="topbar">
+      <a class="back" href="index.html">← Bibliothèque de widgets</a>
+      <span class="status" id="status">Prêt</span>
+    </div>
+
+    <section class="hero">
+      <div>
+        <h1>Atelier d’analyse</h1>
+        <p class="intro">Colle tes textes, indique le point de vue à mettre en avant, puis génère une trame structurée prête à retravailler ou exporter.</p>
+      </div>
+      <div class="mode-card">
+        <strong>Plans disponibles</strong>
+        <p>Dialectique, opérationnel ou confrontation de deux points de vue avec solution logique détachée.</p>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="panel">
+        <h2>Entrée</h2>
+        <div class="form-grid">
+          <label>
+            <span>Titre de la fiche</span>
+            <input id="analysis-title" type="text" placeholder="Ex. Mémoire certifiée">
+          </label>
+
+          <label>
+            <span>Idée générale</span>
+            <input id="analysis-idea" type="text" placeholder="Ex. La mémoire certifiée devient la ressource centrale">
+          </label>
+
+          <label>
+            <span>Structure argumentative</span>
+            <select id="analysis-structure">
+              <option value="dialectique">Thèse / antithèse / synthèse</option>
+              <option value="operationnel">Problème / solution / mise en œuvre</option>
+              <option value="confrontation">Deux points de vue / solution logique détachée</option>
+            </select>
+          </label>
+
+          <label class="wide">
+            <span>Textes à analyser</span>
+            <textarea id="analysis-text" placeholder="Colle ici l’article, tes notes, ou plusieurs extraits à confronter..."></textarea>
+          </label>
+
+          <label class="wide">
+            <span>Sources, liens ou références</span>
+            <textarea id="analysis-sources" placeholder="Ajoute ici les liens, articles, PDF ou références à conserver avec l’analyse..."></textarea>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="generate-analysis" type="button">Générer la trame</button>
+          <button class="secondary" id="save-analysis" type="button">Sauvegarder</button>
+          <button class="secondary" id="copy-analysis" type="button">Copier</button>
+          <button class="secondary" id="download-analysis" type="button">Exporter .md</button>
+          <button class="secondary" id="clear-analysis" type="button">Effacer</button>
+        </div>
+
+        <div class="library" id="saved-list"></div>
+      </div>
+
+      <pre class="output" id="analysis-output" aria-live="polite"></pre>
+    </section>
+  </main>
+
+  <script>
+    const planLabels = {
+      dialectique: {
+        type: "Thèse / antithèse / synthèse",
+        parts: [
+          ["I - La thèse : ce que l'idée permet de comprendre", "A) Le fait central", "B) La dynamique économique", "C) L'opportunité qui apparaît"],
+          ["II - L'antithèse : ce qui limite ou contredit cette lecture", "A) Les confusions possibles", "B) Les contraintes techniques", "C) Le risque de surestimation"],
+          ["III - La synthèse : le point d'équilibre", "A) Ce qui peut réellement se produire", "B) Les acteurs capables d'en profiter", "C) Les conditions à surveiller"]
+        ]
+      },
+      operationnel: {
+        type: "Problème / solution / mise en œuvre",
+        parts: [
+          ["I - Le problème : ce qui bloque ou crée la tension", "A) Le constat de départ", "B) Les acteurs concernés", "C) Les risques si rien ne change"],
+          ["II - La solution : ce qui répond au problème", "A) Le levier principal", "B) Les infrastructures nécessaires", "C) La valeur créée"],
+          ["III - La mise en œuvre : comment passer de l'idée à l'action", "A) Les premières étapes", "B) Les indicateurs à suivre", "C) Les conditions de réussite"]
+        ]
+      },
+      confrontation: {
+        type: "Deux points de vue / solution logique détachée",
+        parts: [
+          ["I - Premier point de vue : la lecture favorable", "A) L'argument principal", "B) Les preuves ou signaux disponibles", "C) La promesse implicite"],
+          ["II - Second point de vue : la lecture opposée", "A) L'objection centrale", "B) Les angles morts", "C) Les conséquences possibles"],
+          ["III - Solution logique : sortir des orientations de pensée", "A) Les faits qui résistent aux opinions", "B) Le scénario le plus robuste", "C) La décision rationnelle à retenir"]
+        ]
+      }
+    };
+
+    const titleInput = document.querySelector("#analysis-title");
+    const ideaInput = document.querySelector("#analysis-idea");
+    const structureInput = document.querySelector("#analysis-structure");
+    const textInput = document.querySelector("#analysis-text");
+    const sourcesInput = document.querySelector("#analysis-sources");
+    const output = document.querySelector("#analysis-output");
+    const status = document.querySelector("#status");
+    const savedList = document.querySelector("#saved-list");
+    const storageKey = "widget-analysis-library";
+
+    document.querySelector("#generate-analysis").addEventListener("click", () => {
+      output.textContent = buildAnalysisMarkdown();
+      setStatus("Trame générée");
+    });
+
+    document.querySelector("#save-analysis").addEventListener("click", () => {
+      const markdown = output.textContent.trim() || buildAnalysisMarkdown();
+      output.textContent = markdown;
+      const items = getSaved();
+      const title = shortCreativeTitle(titleInput.value, ideaInput.value, textInput.value);
+      items.unshift({
+        id: Date.now(),
+        title,
+        idea: ideaInput.value.trim() || "Idée à préciser",
+        structure: planLabels[structureInput.value].type,
+        markdown
+      });
+      localStorage.setItem(storageKey, JSON.stringify(items.slice(0, 24)));
+      renderSaved();
+      setStatus("Fiche sauvegardée");
+    });
+
+    document.querySelector("#copy-analysis").addEventListener("click", async () => {
+      const markdown = output.textContent.trim() || buildAnalysisMarkdown();
+      output.textContent = markdown;
+      await navigator.clipboard.writeText(markdown);
+      setStatus("Copié");
+    });
+
+    document.querySelector("#download-analysis").addEventListener("click", () => {
+      const markdown = output.textContent.trim() || buildAnalysisMarkdown();
+      output.textContent = markdown;
+      downloadMarkdown(shortCreativeTitle(titleInput.value, ideaInput.value, textInput.value), markdown);
+      setStatus("Export préparé");
+    });
+
+    document.querySelector("#clear-analysis").addEventListener("click", () => {
+      titleInput.value = "";
+      ideaInput.value = "";
+      textInput.value = "";
+      sourcesInput.value = "";
+      output.textContent = "";
+      setStatus("Champs effacés");
+    });
+
+    savedList.addEventListener("click", (event) => {
+      const load = event.target.closest("[data-load]");
+      const exportButton = event.target.closest("[data-export]");
+      const remove = event.target.closest("[data-remove]");
+      const items = getSaved();
+
+      if (load) {
+        const item = items.find((entry) => String(entry.id) === load.dataset.load);
+        if (item) {
+          output.textContent = item.markdown;
+          titleInput.value = item.title;
+          ideaInput.value = item.idea;
+          setStatus("Fiche chargée");
+        }
+      }
+
+      if (exportButton) {
+        const item = items.find((entry) => String(entry.id) === exportButton.dataset.export);
+        if (item) downloadMarkdown(item.title, item.markdown);
+      }
+
+      if (remove) {
+        localStorage.setItem(storageKey, JSON.stringify(items.filter((entry) => String(entry.id) !== remove.dataset.remove)));
+        renderSaved();
+        setStatus("Fiche supprimée");
+      }
+    });
+
+    function buildAnalysisMarkdown() {
+      const title = shortCreativeTitle(titleInput.value, ideaInput.value, textInput.value);
+      titleInput.value = title;
+      const idea = stripEndPunctuation(ideaInput.value.trim() || "L'idée directrice reste à préciser");
+      const sourceText = textInput.value.trim();
+      const sources = sourcesInput.value.trim();
+      const plan = planLabels[structureInput.value];
+      const signals = extractSignals(sourceText);
+      const keywords = keywordsFromText(`${idea} ${sourceText}`).slice(0, 8);
+
+      return [
+        `# ${title}`,
+        "",
+        "## Introduction",
+        "",
+        `${idea}. Cette analyse organise les faits disponibles pour distinguer l'intuition forte, ses limites et les conditions concrètes qui permettraient de la vérifier.`,
+        "",
+        ...plan.parts.flatMap((part, partIndex) => {
+          const [heading, ...subparts] = part;
+          return [
+            `## ${heading}`,
+            "",
+            ...subparts.flatMap((subpart, subIndex) => {
+              const signal = signals[(partIndex * 3 + subIndex) % Math.max(signals.length, 1)] || idea;
+              return [
+                `### ${subpart}`,
+                "",
+                paragraphFor(structureInput.value, partIndex, subIndex, idea, signal),
+                ""
+              ];
+            })
+          ];
+        }),
+        "## Conclusion",
+        "",
+        "La position la plus solide consiste à ne pas confondre récit, infrastructure et capture de valeur. L'hypothèse devient défendable si les faits montrent une demande réelle, un usage mesurable et des acteurs capables de transformer cette demande en avantage durable.",
+        "",
+        "## Points à vérifier",
+        "",
+        "- Quels acteurs captent réellement la valeur ?",
+        "- Quelle ressource est consommée : mémoire, stockage, blockspace, énergie, identité ou attention ?",
+        "- Le lien économique est-il direct, indirect ou seulement narratif ?",
+        "- La demande est-elle institutionnelle, individuelle ou mixte ?",
+        "- Existe-t-il des sources permettant de vérifier les volumes, les coûts et les usages ?",
+        ...(sources ? [
+          "",
+          "## Sources",
+          "",
+          ...sources.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).map((line) => `- ${line}`)
+        ] : []),
+        "",
+        "## Mots-clés",
+        "",
+        keywords.map((keyword) => `- ${keyword}`).join("\n")
+      ].join("\n");
+    }
+
+    function paragraphFor(structure, partIndex, subIndex, idea, signal) {
+      const openers = {
+        dialectique: [
+          "Le premier niveau de lecture consiste à prendre l'hypothèse au sérieux.",
+          "La limite apparaît lorsque l'on distingue le récit général du mécanisme économique réel.",
+          "La synthèse consiste à isoler ce qui reste vrai une fois les excès retirés."
+        ],
+        operationnel: [
+          "Le problème vient de la distance entre l'intuition et son application concrète.",
+          "La solution consiste à identifier l'infrastructure qui porte réellement l'usage.",
+          "La mise en œuvre demande de passer des concepts aux indicateurs observables."
+        ],
+        confrontation: [
+          "Le premier point de vue voit dans cette idée un signal de bascule.",
+          "Le second point de vue rappelle que toute adoption technique ne crée pas automatiquement de valeur.",
+          "La solution logique consiste à détacher l'analyse des préférences initiales."
+        ]
+      };
+      const opener = openers[structure][partIndex];
+      const focus = subIndex === 0 ? "Le fait central à retenir est" : subIndex === 1 ? "Le point de tension est" : "La conséquence à surveiller est";
+      return `${opener} ${focus} : ${stripEndPunctuation(signal)}. Dans cette perspective, l'idée générale peut être formulée ainsi : ${idea}.`;
+    }
+
+    function extractSignals(text) {
+      return text
+        .replace(/\s+/g, " ")
+        .split(/(?<=[.!?])\s+/)
+        .map((sentence) => sentence.trim())
+        .filter((sentence) => sentence.length > 45 && sentence.length < 240)
+        .slice(0, 12);
+    }
+
+    function extractTitle(text) {
+      return text.split(/\r?\n/).map((line) => line.trim()).find((line) => line.length > 8 && line.length < 90);
+    }
+
+    function cleanTitle(value) {
+      return value.trim().replace(/\s+/g, " ");
+    }
+
+    function shortCreativeTitle(rawTitle, idea = "", text = "") {
+      const initial = cleanTitle(rawTitle || extractTitle(text) || idea || "Analyse vive");
+      if (countTitleWords(initial) <= 3) return sentenceTitle(initial);
+
+      const haystack = `${initial} ${idea} ${text}`.toLowerCase();
+      const normalized = haystack.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const signatures = [
+        [/token|memoire|certif|blockchain|nft/, "Mémoire certifiée"],
+        [/polygon|unicorn|blockspace|stablecoin/, "Rails tokenisés"],
+        [/assurance|alger|souverain|donnee/, "Données souveraines"],
+        [/hbm|hynix|dram|semi-conducteur|gpu/, "Mémoire reine"],
+        [/decret|tertiaire|operat|energie/, "Tertiaire 2030"],
+        [/crypto|bearish|bitcoin|market/, "Crypto brouillard"],
+        [/law|billet|banque|faillite/, "Fièvre Law"],
+        [/iphone|credit agricole|paiement|apple/, "iPhone bancaire"]
+      ];
+      const match = signatures.find(([pattern]) => pattern.test(normalized));
+      if (match) return match[1];
+
+      const words = keywordsFromText(`${initial} ${idea} ${text}`).slice(0, 3);
+      return titleCase(words.length ? words.join(" ") : "Analyse vive");
+    }
+
+    function countTitleWords(value) {
+      return (value.match(/[A-Za-zÀ-ÖØ-öø-ÿ0-9]+/g) || []).length;
+    }
+
+    function titleCase(value) {
+      const small = new Set(["de", "du", "des", "la", "le", "les", "et", "à", "au", "aux", "d"]);
+      return cleanTitle(value)
+        .split(/\s+/)
+        .slice(0, 3)
+        .map((word, index) => {
+          const lower = word.toLowerCase();
+          if (index > 0 && small.has(lower)) return lower;
+          if (/^[A-Z0-9]{2,}$/.test(word)) return word;
+          return lower.charAt(0).toUpperCase() + lower.slice(1);
+        })
+        .join(" ");
+    }
+
+    function sentenceTitle(value) {
+      const cleaned = cleanTitle(value);
+      return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+    }
+
+    function stripEndPunctuation(value) {
+      return value.trim().replace(/[.!?]+$/g, "");
+    }
+
+    function keywordsFromText(text) {
+      const stop = new Set("alors avec cette dans pour plus mais donc comme entre nous vous elles ils elle lui leur leurs des les une que qui quoi dont ceci cela cette sans sont avoir être faire peut peut-il aux sur ses son selon tout tous très quand même plus moins".split(" "));
+      const words = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").match(/[a-z0-9]{4,}/g) || [];
+      const counts = new Map();
+      words.forEach((word) => {
+        if (!stop.has(word)) counts.set(word, (counts.get(word) || 0) + 1);
+      });
+      return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([word]) => word);
+    }
+
+    function getSaved() {
+      return JSON.parse(localStorage.getItem(storageKey) || "[]");
+    }
+
+    function renderSaved() {
+      const items = getSaved();
+      if (!items.length) {
+        savedList.innerHTML = `<p class="empty">Aucune fiche sauvegardée pour l’instant.</p>`;
+        return;
+      }
+      savedList.innerHTML = items.map((item) => `
+        <article class="saved-card">
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.structure)} · ${escapeHtml(item.idea)}</p>
+          <div class="saved-actions">
+            <button class="secondary" type="button" data-load="${item.id}">Charger</button>
+            <button class="secondary" type="button" data-export="${item.id}">Exporter</button>
+            <button class="secondary" type="button" data-remove="${item.id}">Supprimer</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function slugify(value) {
+      return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "analyse";
+    }
+
+    function downloadMarkdown(title, markdown) {
+      const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${slugify(title)}.md`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function setStatus(message) {
+      status.textContent = message;
+      window.clearTimeout(setStatus.timer);
+      setStatus.timer = window.setTimeout(() => status.textContent = "Prêt", 1600);
+    }
+
+    renderSaved();
+  </script>
+  <script src="widget-nav.js"></script>
+  <script src="../../assets/ibiza-radio-widget.js" defer></script>
+</body>
+</html>
